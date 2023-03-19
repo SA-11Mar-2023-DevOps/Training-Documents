@@ -1,0 +1,457 @@
+
+11th Mar. - DevOps Batch :
+
+	Timings : 12th Mar. ==> 2 - 5pm IST
+From Next week onwards: i.e., from 18th ==> 7PM to 10PM IST.
+
+Course Content: 
+
+Agenda :
+	Intro. about the course!!!
+	Introduction to DevOps! 
+	
+	
+Application Development :::
+
+	Application / Software ??
+	
+	Web-based 
+	System Software
+	Application Software 
+	
+SDLC - Software Development Life Cycle!
+
+	-	Application Software :
+			Web Applications
+			Mobile Applications 
+			Desktop Applications 
+		
+	-	System Software 
+			Operating System 
+			Middleware products..
+			Embedded appln.
+
+
+Stages of SDLC - Software Development Life Cycle!
+
+	Requirement Analysis
+	Design
+	Coding
+	Testing 
+	Deployment 
+	Monitor/Maintain
+	
+	
+Water-fall Model : Linear in fashion.
+
+	Requirement Analysis
+	Design
+	Coding
+	Testing 
+	Deployment 
+	Monitor/Maintain
+
+Billing System Application :::
+
+	Detailed Requirement Analysis ---> 6months
+	Design 
+	Coding ---> progress... 
+	Testing 
+	Deployment
+	
+New Change Request / Project 
+
+	Detailed Requirement Analysis ---> 3months
+	Design 
+	Coding ---> progress... 
+	Testing 
+	Deployment
+
+
+Applicationn Architecture ::
+	
+		Monolith Application Architecture :: can us water-fall model
+	
+			Tightly coupled Applications 
+				Dependencies are cannot be splitted into modules. 
+			
+			
+			
+			
+
+Billing System Application :::
+
+	Functions :
+		UI				developed  by dev1 --> can we test independently? NO.
+		db
+		billing
+		stock
+		access
+	
+
+AGILE Methodologies ::: Is a s/w development strategy --> 
+
+Split the project into various Modules :
+
+	Module1/Iteration1 ::: UI 
+		Detailed Requirement Analysis ---> 3months
+		Design 
+		Coding ---> progress... 
+		Testing 
+
+
+	Module2/Iteration2 ::: DB 
+		Detailed Requirement Analysis ---> 3months
+		Design 
+		Coding ---> progress... 
+		Testing 
+		
+		
+	Module3/Iteration3 ::: billing 
+		Detailed Requirement Analysis ---> 3months
+		Design 
+		Coding ---> progress... 
+		Testing 
+		
+	
+In AGILE Methodologies we cannot deploy independent modules to Production environment.	
+	
+		Integration can be contiuous 
+		Delivery  	can be contiuous 
+		Deployment 	Cannot be Continuous
+
+Environments:
+
+	Non-Production Environment			==>				Production Environment (LIVE)
+		DEV 
+		Testing 
+			QA
+			UAT 
+	
+
+Create a Web Application ::::
+
+		E-Commerce Portal 
+		
+		
+
+DevOps :  Is a Software Development Strategy.
+Using DevOps : Continuous Integration, Continuous Delivery & Deployments.
+
+
+Create a Web Application ::::
+
+		E-Commerce Portal ==> www.amazon.com
+		
+	Requirement Analysis
+	Design
+	Coding
+	Testing 
+	Deployment 
+	Monitor/Maintain
+
+
+DevOps Strategy ::::
+
+	Application Architecture :
+	
+		-	Monolith Architecture 
+					- Tightly coupled Applications 
+					- Dependencies are cannot be splitted into modules. 	
+					
+		-	Micro Service Based Application Architecture
+					- Are Designed by the Application Architects/Owners
+					- De-couple the appln.
+					- Independently developed, tested and deployed to production, without impacting other services
+		
+	
+E-Commerce Portal ==> www.amazon.com
+
+Functions/Modules/Tasks/SERVICE  ::: 
+
+	- User Registration / Sign-up 	--> Developer1 --> Design, write the code, testing, Integrate the code for further testing --> Deployment to Prod 
+	- Login 						--> Developer2 --> Design, write the code, testing --> Deployment to Prod 
+	- Search 
+	- Check for Reviews
+	- Add to Cart
+	- Place my order
+	- Payment
+	- Tracking
+	
+
+Domain :
+	Banking
+	Insurance
+	Healthcare
+	Retail 
+	Telecomm
+	
+Telecomm ::
+	Telecomm Service Provider1 --> Introduce a new offer --> ASAP that feature shd be implemented 
+	Telecomm Service Provider2 --> 
+	Telecomm Service Provider3 --> 
+
+
+
+Who are the involved in the SDLC ???
+
+
+	Infra-structure Team ==> provision/creating the servers 
+	Dev Team 						Create a service 
+	Testing Team
+	Release Management Team 
+	Production Support Team
+	Monitoring Team
+	Security Team 
+
+
+
+DevOps Strategy ::: As a DevOps Architect :: 
+
+Introduce a DevOps Process
+
+Telecomm ::
+	Telecomm Service Provider1 --> Introduce a new offer --> ASAP that feature shd be implemented 
+	
+	New_Mirco_Service ==> 
+	
+	Automate Infra-structure using DevOps Tools 
+	Automate the Dev Config 
+	Develop the appln.
+	Automated Testing 
+	
+
+
+
+	
+DevOps Stages :::
+
+	Continuous Development	==>	Helps to improve the dev productivity ==> IDE - Eclipse based IDEs, VS Code, Integration to external systems
+	Continuous Integration	==> Integrate the changes to higher environment for further tesing.
+	Continuous Testing 		==> Using some automated testing tools 
+	Continuous Delivery 	==> Uses Manual approval before the production release
+	Continuous Deployments	==> No need of Manual approvals for production release 
+	Continuous Monitoring 	==> Monitor the prod environment against the intruders/Security Threads 
+
+Roles of DevOps Team ::: 
+
+	Defining the process/strategy
+	create automation scripts
+
+
+Environments: VM Machines 
+
+	Non-Production Environment			==>				Production Environment (LIVE)
+		DEV 
+		Testing 
+			QA
+			UAT 
+			Pre-Prod / Staging							PROD
+		
+Continuous Delivery 	--> Needs Manual Approvals 
+
+Continuous Deployment 	--> Fully Automated release!
+
+Production Deployment Window!  - 4 - 6 hrs
+
+Online banking/ 
+
+Facebook
+
+google
+
+netflix 
+
+
+#########
+DAY-2
+#########
+
+		Intro to DevOps : Stages / Lifecycle of DevOps 
+		Intro to DevOps & Services
+		
+		Fundamentals of AWS Cloud
+		
+		
+		DevOps Stages :::
+		
+		DevOps Lifecycle :::
+		
+		
+	Developer ::: Improve the productivity of developer ???
+	
+		Eclipse based IDEs. 
+			
+		Developer 
+			- will do coding (java program - high level lang --> compiled --> machine lang/binaries - *.war/*.jar/*.dll/*.exe)
+			- build the code (is a process of compiling the source code & Create artifacts/binaries/executables)
+			- promote the code to testing environment 
+			- Inform/Email testing team to perform the testing based the latest artifacts.
+	
+	Using DevOps  ::
+
+		Developer 
+			- will do coding (java/python/.net/angular/nodejs program )
+			- commit/saved the src code to SCM Repo(github Repo).
+			
+		DevOps CI/CD Pipeline : Jenkins CI/CD Pipeline - 
+			- Pickup/checkout the src code from SCM Repo (GIT)
+			- perform automated build the code (is a process of compiling the source code & Create artifacts/binaries/executables) (MAVEN)
+			- promote the code to testing environment (Ansible)
+			- perform automated testing (Selenium)
+			- Notify the users. 
+	
+	script/pipeline - CI/CD
+	
+calc.java
+
+	sum(a,b,c)	
+	c = a + b 	
+	return c
+	
+	
+test data : 5,6, = 11 
+5,5, 10
+100,100,200
+aboutafasdfs, asdfsdf, 
+
+Test report 
+	how many test exec. 
+	succ
+	fail
+	overall test covearge 
+	
+report will be sent to dev team 
+
+
+	Fundamentals of Cloud Computing (AWS)
+	
+		Infra-structure ::: 
+		
+		Developer :::
+		
+			Infra-structure (AWS) 
+			
+			Create Virtual Machines & Install all the required DevOps Tools and Implement.
+
+
+	
+	Cloud Computing ???
+	
+		What is Computing Device ???
+		
+			Development :;
+				Develop a Java Web Application --> 
+				
+					What are the prerequisites ???
+						Hardware,processor,cpu,ram,memory,storage,environment,server, card,.....?????? --> Computing Device!
+						
+			
+			Laptop --> Windows 11 OS
+			
+				To develop a Application using Linux OS.
+	
+			Laptop --> Hardware (Win11) --> Hypervisor --> Create Virtual Machines2(To install Linux OS)
+						8GB RAM 2CPUs
+						
+			New Laptop with Linux 
+			
+			MAC 
+			
+			++Linux 
+			
+			Cloud Platform --> 
+			
+				Cloud Service Providers --> AWS/AZURE/GCP/  -- Create an Account.
+	
+	
+	
+			On-Premises Platform	-- Virtual Machines 
+			
+			Cloud Platform 			-- Virtual Machines 
+			
+			Types of service?
+			
+			
+			Server ---> MYSQL/
+			Webserver --> Nginx/Tomcat 
+			
+				deployment ??
+				
+				Deployment Server / Hosted Server ( Infra-structure )   -- IAAS
+				
+					QA  /domain/webappln
+					
+					UAT
+					
+					PROD 
+		
+				Application Server(Software) (Platform) -- PAAS  
+					Mysql/Nginx/Tomcat
+					
+			
+			Hybrid Platform :::
+			
+				On-premises			   &  			Cloud 
+				
+			Cloud Adoption / migration to Cloud platform
+			
+				- All the light weight appln are first migrated to cloud			Cloud platform 
+				- All the tightly coupled appln are migrated later					on-prem 
+				
+
+Summary ::
+		DevOps Fundamentals!
+		AWS Fundamental
+			Cloud Computing...
+			
+			
+########
+DAY-3
+########
+
+			AWS Cloud Services
+			Access to AWS Cloud
+			
+			Lab Session prerequisites :
+			
+				-	
+				-	
+				-	
+			
+			Demo!
+			
+			
+			In AWS, EC2 Instances refers to Virtual Machines Created in AWS Platform.
+			
+		DevOps Tools ::
+		
+			Managed Services : 
+				AWS - Codepipeline,commit,build...
+				AZURE - Azure DevOps Services 
+				
+				
+			Self-Managed Services / Open-Source Tools :
+				Jenkins 
+				Git
+				GITHUB
+				Ansible
+				Docker
+				Kubernetes
+				Terraform
+				JIRA 	- 	Application LifeCycle Management Tools
+				
+				
+		- Create a Account in GITHUB.
+			Remote GIT Repository to maintain and manage the source code, Files and Folders.
+			
+		- AWS Cloud -- Create Free Tier Account. 
+			 valid email_id, contact_number, Credit.debit Card (enabled with International Transaction)
+			
+			- Create AWS EC2 Instances.
+				i.e., Virtual Machines 
+			
+			
+			
+
+			
