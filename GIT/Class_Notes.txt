@@ -674,4 +674,145 @@ Next Module ::::
 		web appln.
 		spring boot 
 		java web appln.
+
+*******************************************************************************
+
+
+##############
+29th Apr. 2023
+##############
+
+		Git Remote Repositories :::
+
+			git branching techniques 
+			rebase, squash
+			branching strategies
+			Stash ==> 
+
+		
+	Branching Strategies :::
+
+		Feature based 
+
+
+
+		master branch 
+			Dev_branch : 
+			 	feature1 ==> Scripts... created some changes in the repo.... created a index.jsp file --- adding the incremental changes to staging.
+				feature2 
+
+		Stash ::: ==> Used to safely move the UnCommited changes from staging area to Temp. Area. (or) Temp. Branch.
+
+
+			Stash current work:
+					$ git stash
+
+					Saving stashes with a message: 
+					$ git stash save "<Stashing Message>"
+
+					Check the stored stashes: 
+					$ git stash list
+
+					Re-apply the changes that you just stashed 
+					$ git stash apply 
+
+					Track the stashes and their changes: 
+					$ git stash show stash@{0}
+
+					Re-apply the previous commits: 
+					$ git stash pop
+
+					Delete a most recent stash from the queue: 
+					$ git stash drop
+
+					Delete all the available stashes at once: 
+					$ git stash clear
+
+					Stash work on a separate branch: 
+					$ git stash branch <branch name>
+
+	.gitignore!!!
+	
+	GIT Remote Repository :::
+
+		github :
+			create a remote repo
+			create files,
+			create branches, pull request, merge
+			how to access it in local repo.
+		git clone,pull,fetch,push,remote 
+		github access token 
+ 
+	.gitignore 
+		
+	java_web_appln.project -- craeted in  Dev Machine.
+	
+	Java_web_appln.project 3-tier appln. dbase.     >>>> 	push t changes into remote repo.
+		src 
+		  sample.java
+		  index.jsp 
+		test
+		pom.xml
+		properties
+		config
+		secrets
+		db1_credential
+		target
+		  *.war
+
+	git init 
+	.gitignore file
+		secrets
+		db1_credential
+	
+
+
+
+
+
+
+
+
+	how to access it in local repo.???????
+		git clone,pull,fetch,push,remote 
+		github access token
+
+
+	Remote Repo.?
+
+	Developers' Workload ???
+		New Project 
+			git init  == > push 			
+	
+			git clone  ==> push
+		Change Request / Enhancements 
+		Bug fix...
+	
+		git clone https://github.com/SA-11Mar-2023-DevOps/testremoterepo1.git
+	
+
+git clone
+push
+remote 
+
+	fetch --> check for the incremental changes
+	pull  --> git fetch & merge	
+
+
+
+Summary :::
+	git workflow
+	git branching strategies
+	Misc. GIT Command
+	Merge,rebase,squash,stash
+	Remote Repo.
+
+Next Module ::::		
+
+	Jenkins.
+
+	Maven Projects?
+		web appln.
+		spring boot 
+		java web appln.
 		
