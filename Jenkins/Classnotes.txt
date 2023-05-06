@@ -249,3 +249,134 @@ Next:
 	Remote Server Handling
 	email...		
 
+
+
+
+##############
+6th May. 2023
+##############
+
+
+	
+Next:
+	Nodes
+	Remote Server Handling
+	email...
+
+
+		Jenkins Nodes :: Slave Machines
+
+
+		Jenkins Master --> Acts as server - used to create the jobs and schedule the jobs to Nodes.
+			Microservice based architecure!!!
+
+		Jenkins Slave ==> Build Server.
+			Install the build tools (maven,jdk,git)
+
+		Jenkins_Master	
+			Jenkins Slave ==> Build Server. - Java Aplication (maven,jdk,git)
+			SSH Connection --
+			Create user
+				Create SSH to this user 
+
+
+		Jenkins Master - Slave Configuration :::
+			
+
+
+pipeline {
+    agent { label 'sa-javaslave' }
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "slave_maven"
+    }
+
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                echo 'Checkout Src from github repo'
+		git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Perform Maven Build'
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+        }
+        stage('Deploy to QA Server') {
+            steps {
+		script {
+		sshPublisher(publishers: [sshPublisherDesc(configName: 'QA_Server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: 'target/', sourceFiles: 'target/mvn-hello-world.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+		}
+            }
+	}
+    }
+}
+	
+
+	Jenkins Master --> To create a pipeline job
+		Slave1 --> Perform the Build
+
+	Development Workflow :::
+
+	Developer use Eclipse to create the source code 	
+
+		junit tomcat - unit test.
+
+		create artifacts
+
+	Testing team --> QA,UAT
+
+	From Eclipse Code -- Pushed to github --> Jenkins pipeline --> build_server(slave) -> Promote to QA
+
+		Auto-trigger .
+
+	Commit source code in repo.(github)	
+	Checkout the code from github 
+	and perform build			
+			
+	non-prod					prod
+	dev
+	build_envi
+	test(qa,uat,...)
+
+
+	Test_Server ===> test the web application ==> jdk, tomcat
+		VM,  jdk, tomcat, 
+
+
+	Jenkins_Master 
+		Slave1 jdk, maven 
+	TomcatServer -- jdk, tomcat, 
+
+
+	Add user in tomcat server
+		.ssh key -- 
+
+	publish over ssh plugins
+
+
+
+	Deployment ::::
+
+		Copy the artifacts from source machine to target machine 
+
+
+	source : slave						Target : Tomcat server
+
+		target/mvn-helloworld.war				/opt/tomcat/webapps/mvn-helloworld.war
+
+
+				
+
+		
+
+
+
+
+
+	
+
