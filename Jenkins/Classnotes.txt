@@ -370,7 +370,198 @@ pipeline {
 		target/mvn-helloworld.war				/opt/tomcat/webapps/mvn-helloworld.war
 
 
-				
+			
+##############
+7th May. 2023
+##############
+		
+	Automate the build and deployment using Build Triggers!
+
+	Master = Scheduling the pipeline jobs.
+
+	Use case 1 :::
+		
+	Dev,build,test ---> 
+	cleanup,add more volume, 
+
+
+		Build Periodic 
+		 cleanup_vol jobs on daily basis.
+
+		Envi. --> Non-Prod 			PROD 
+			Dev,Build,QA,UAT
+
+		Jenkins_Job -- Start / Stop the Servers
+			Jenkins_Start_job ==> 9AM
+			Jenkins_Stop_job  ==> 10PM
+
+
+	Install git in master :::
+			
+		git poll scm
+
+			Test cycle ==> 
+
+			once in 4 hrs test cycle can run.
+			8 - 12 
+
+
+		dev_team -- commit the changes to src repo. --> QA
+
+		github webhooks
+
+			--> for every commit in the src code repo. build will gets triggered using github webhook.
+
+		goto the repo. level settings :::
+			add web hook
+			github payload url :: http://13.235.2.213:8080/github-webhook/
+
+	
+
+		Java Code Coverage Tool  -- JaCoCo Tool / Plugin
+
+
+
+
+
+
+
+
+
+pipeline {
+    agent { label 'sa-javaslave' }
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "slave_maven"
+    }
+
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                echo 'Checkout Src from github repo'
+		git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+            }
+        }
+        stage('Maven Build') {
+            steps {
+                echo 'Perform Maven Build'
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+        }
+        stage('Deploy to QA Server') {
+            steps {
+		script {
+		sshPublisher(publishers: [sshPublisherDesc(configName: 'QA_Server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: 'target/', sourceFiles: 'target/mvn-hello-world.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+		}
+        }
+	}
+    }
+}
+
+
+
+
+source code repo. Template ::::
+
+Create Remote repo. 
+
+	Jenkinsfile
+	Dockerfile
+	deploymentobj.yaml
+	service.yaml
+
+
+Email Notifications :::::
+
+
+Email Notification Plugins :::
+
+SMTP Server :
+smtp.gmail.com
+
+SMTP Authentication
+
+SMTP Port :: 465
+
+Login to Gmail :::
+
+Click Account Settings
+
+select Security 
+
+MFA --> mobile#
+App Password = 16
+What ? window
+Which Appln - email
+
+
+
+GIT Merge conflicts :::
+
+tried to update the same file from diff branch 
+
+
+master 
+	file1.txt rec1,2,3,4 ==> rec1,234,2342,2342(featurel)	merged
+		git merge feature2
+			     ==> rec1,asdf,aasdf,asdfs(feature2) ==> merging
+	
+	Merge Conflict occurs. file1.txt
+
+	- Identify the file that is causing merge conflict.
+	- Review the changes done in that file.
+	- >>>>>HEAD
+	  feature1
+	  >>>>> feature2
+	- update the file with the actual content. rec1,234,2342,2342
+	- git add and git commit	
+			status will be clean
+
+
+	
+feature1
+	file1.txt rec1,2,3,4 ==> rec1,234,2342,2342
+feature2
+	file1.txt rec1,2,3,4 ==> rec1,asdf,aasdf,asdfs
+
+
+
+Eclipse ::::
+
+Use ::::
+
+	Maven Web Appln.
+	- Using Eclipse, Create Maven Web Appln. project
+	- Push the project to github repo.
+	
+	- Use Eclipse, import the Maven Web Appln. project from github
+	- Make the necessary changes
+	- Push the changes to remote repo.
+
+	Auto trigger Jenkins CI/CD Pipeline using Github webhook / pollSCM. 
+		(SCM Checkout, Build, Create Artifacts, Deploy to QA Server)
+
+	Ensure that you cover all possible concepts.
+
+Jenkins :::
+
+Inhouse project for internal automation....
+
+	Server Management 
+		Build_Server
+		Test_Server
+
+	Periodic Server Management :
+
+	Jenkins_Job1: Backup & Recovery 
+	Jenkins_Job2: Update the security patches / upgrade / Install Cert. & Licenses
+	Jenkins_Job3: Start / Stop Job
+
+
+	
+		
 
 		
 
