@@ -1,0 +1,1265 @@
+DevOps 11thApr. Batch
+
+##############
+22nd Apr. 2023
+##############
+
+Git Misc. Commands ::
+
+		revert
+		reset
+		Branches
+
+git rm --cached 	==> is to unstage.
+git rm -rf 		==> unstage and remove from Working dir.
+
+
+	Working Dir. --> Staging Area --> Local Repo.
+
+
+	git revert
+	git reset 
+
+	git reset :::
+
+					add					Commit
+		Working Dir	 	==> 	add the changes to staging 	===>  		Local repo.
+
+
+		file1.txt			file1.txt					file1.txt	HEAD	 : master CM3
+		file1.txt			file1.txt					file1.txt	 	 : master CM2
+		file1.txt			file1.txt					file1.txt	 	 : master CM1
+
+
+
+	git reset ::
+		soft
+		*mixed		default option.
+		hard
+
+	git reset --soft <commit_id>	==> remove the changes from local repo. but the changes wll be available in staging area & Working dir.
+
+	eg.: 
+		git reset --soft CM2
+
+		file1.txt			file1.txt								HEAD	 : master CM2
+		file1.txt			file1.txt					file1.txt	 	 : master CM1
+
+	git reset --soft <commit_id>	==> remove the changes from local repo. but the changes will be available in staging area & Working dir.
+
+	git reset --mixed <commit_id>	==> remove the changes from local repo. & Staging Area but the changes will be available Working dir.
+
+	git reset --hard <commit_id>	==> remove the changes from local repo. & Staging Area as well from Working dir.
+
+
+	git reset <commit_id>
+
+		Always git reset is recommended to use in local repo. or in a single user environment
+		It should not be used in shared repository.
+		Avoid using reset --hard option.
+
+		Because, git reset will change the commit history, and we lose track of the history.
+		
+
+
+
+	index.jsp 
+
+		func1()
+		{
+		}			git add .
+
+
+		func2()
+		{
+		}			git add .
+
+
+		func3()
+		{
+		}			git add .
+
+
+	git commit -m "Updated index.jsp"
+
+	git revert --> used to undo the changes. 
+
+			It creates a new commit point and never remove any entry from commit history.
+			Used to revert a specific commit.
+
+
+	git revert <commit_id1> <commit_id2>
+
+	prod_deployment ::::
+
+		Test the prod code. 
+
+	projectv1.4.dummy -- new - revert projectv1.4		is having issue. due to some external dependencies.
+	projectv1.5 -- new
+	projectv1.4 -- new		is having issue. due to some external dependencies.
+	projectv1.3 -- new 
+
+	projectv1.2 -- under execution	
+	projectv1.1 -- under execution
+	projectv1.0 -- under execution
+
+
+jus git revert 	projectv1.4 -- new
+
+	git revert 	projectv1.4.dummy
+
+
+	deployment -- > 4 - 6hrs of deployment window 
+		fix the issue....
+		revert
+
+
+
+	git commit !
+	
+	git commit -m "valid commit msg"	CR#/REL# - description
+	
+
+						
+	git commit -m "CR10423 - Created file1.txt"  ==> 
+
+	git commit --amend -m "valid commit message"
+
+
+
+	GIT Branches ::::
+	
+		Git Branching Techniques ::::
+
+			Parallel Development 
+
+
+	project_repo1:
+		master 				==> Will be considered as a shared entity/prod copy
+
+	master - cm1,cm2,cm3
+		f1.txt,f2.txt,f3.txt
+
+	Create  feature branch : - cm1,cm2,cm3			CR1 CR2
+		f1.txt,f2.txt,f3.txt,f4.txt,f5,txt
+
+
+	master - cm1,cm2,cm3
+		f1.txt,f2.txt,f3.txt
+
+		Create a new branch based on master : CR1-feature  	- cm1,cm2,cm3
+									f1.txt,f2.txt,f3.txt,l1.txt
+
+
+		Create a new branch based on master : CR2-feature  	- cm1,cm2,cm3
+									f1.txt,f2.txt,f3.txt,s1.txt
+
+	Git Branching Strategies ::::
+
+	Java_web_application src code repo :::
+
+		master	--> cm1,cm2,cm3
+
+			index.jsp
+
+			feature1 --				Commpleted
+				cm1,cm2,cm3,f1cm1,f1cm2
+			feature2 --
+				cm1,cm2,cm3,f2cm1,f2cm2
+			feature3 --
+				cm1,cm2,cm3,f3cm1,f3cm2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+		master	--> cm1,cm2,cm3
+		
+			Development_Branch : cm1,cm2,cm3
+
+				feature1 --				Commpleted
+					cm1,cm2,cm3,f1cm1,f1cm2
+				feature2 --
+					cm1,cm2,cm3,f2cm1,f2cm2
+				feature3 --
+					cm1,cm2,cm3,f3cm1,f3cm2
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		master	--> cm1,cm2,cm3
+
+		
+			Integration_Branch :::						Team1
+
+				Development_Branch1 : cm1,cm2,cm3
+
+					feature1 --				Commpleted
+						cm1,cm2,cm3,f1cm1,f1cm2
+					feature2 --
+						cm1,cm2,cm3,f2cm1,f2cm2
+					feature3 --
+						cm1,cm2,cm3,f3cm1,f3cm2
+		
+
+				Development_Branch2 : cm1,cm2,cm3
+
+					feature1 --				Commpleted
+						cm1,cm2,cm3,f1cm1,f1cm2
+					feature2 --
+						cm1,cm2,cm3,f2cm1,f2cm2
+					feature3 --
+						cm1,cm2,cm3,f3cm1,f3cm2
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		master	--> cm1,cm2,cm3		
+
+			Release_Branch :::
+
+				Integration_Branch :::						Team1
+
+					Development_Branch1 : cm1,cm2,cm3
+
+						feature1 --				Commpleted
+							cm1,cm2,cm3,f1cm1,f1cm2
+						feature2 --
+							cm1,cm2,cm3,f2cm1,f2cm2
+						feature3 --
+							cm1,cm2,cm3,f3cm1,f3cm2
+		
+
+					Development_Branch2 : cm1,cm2,cm3
+
+						feature1 --				Commpleted
+							cm1,cm2,cm3,f1cm1,f1cm2
+						feature2 --
+							cm1,cm2,cm3,f2cm1,f2cm2
+						feature3 --
+							cm1,cm2,cm3,f3cm1,f3cm2
+
+				Integration_Branch :::						Team2
+
+					Development_Branch1 : cm1,cm2,cm3
+
+						feature1 --				Commpleted
+							cm1,cm2,cm3,f1cm1,f1cm2
+						feature2 --
+							cm1,cm2,cm3,f2cm1,f2cm2
+						feature3 --
+							cm1,cm2,cm3,f3cm1,f3cm2
+		
+
+					Development_Branch2 : cm1,cm2,cm3
+
+						feature1 --				Commpleted
+							cm1,cm2,cm3,f1cm1,f1cm2
+						feature2 --
+							cm1,cm2,cm3,f2cm1,f2cm2
+						feature3 --
+							cm1,cm2,cm3,f3cm1,f3cm2
+
+				Integration_Branch :::						Team3
+
+					Development_Branch1 : cm1,cm2,cm3
+
+						feature1 --				Commpleted
+							cm1,cm2,cm3,f1cm1,f1cm2
+						feature2 --
+							cm1,cm2,cm3,f2cm1,f2cm2
+						feature3 --
+							cm1,cm2,cm3,f3cm1,f3cm2
+		
+
+					Development_Branch2 : cm1,cm2,cm3
+
+						feature1 --				Commpleted
+							cm1,cm2,cm3,f1cm1,f1cm2
+						feature2 --
+							cm1,cm2,cm3,f2cm1,f2cm2
+						feature3 --
+							cm1,cm2,cm3,f3cm1,f3cm2
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+		master	--> cm1,cm2,cm3,hfcm1
+
+			adhoc/hotfix_Branch ::: cm1,cm2,cm3,hfcm1
+
+			Integration_Branch :::						Team1
+
+				Development_Branch1 : cm1,cm2,cm3,hfcm1
+
+					feature1 --				Commpleted
+						cm1,cm2,cm3,f1cm1,f1cm2
+					feature2 --
+						cm1,cm2,cm3,f2cm1,f2cm2
+					feature3 --
+						cm1,cm2,cm3,f3cm1,f3cm2
+		
+
+				Development_Branch2 : cm1,cm2,cm3,hfcm1
+
+					feature1 --				Commpleted
+						cm1,cm2,cm3,f1cm1,f1cm2
+					feature2 --
+						cm1,cm2,cm3,f2cm1,f2cm2
+					feature3 --
+						cm1,cm2,cm3,f3cm1,f3cm2
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	Create Branches ::::
+
+		git branch 		==> list the branches
+
+		git switch -c feature1
+		git branch <branch_name>
+		git checkout -b feature4
+
+
+
+##############
+23rd Apr. 2023
+##############
+
+
+	Working with GIT Branches!!!!
+
+	How to create branches in local
+
+	Git Merge :::
+
+		-	First we should switch to the target branch.
+		-	From target branch issue the following command :
+				git merge feature1 
+	
+
+
+		master	--> cm1,cm2,cm3
+
+			feature1 --				Commpleted
+				cm1,cm2,cm3
+				cm1,cm2,cm3,f1cm1	
+
+			feature2 --				Commpleted
+				cm1,cm2,cm3,f2cm1
+
+
+		git merge feature1
+
+		* master ---> cm1,cm2,cm3,f1cm1,f2cm1
+
+
+
+	Merge Conflict :::
+
+		1. How the Merge Conflict Occurs ?
+			Merge Conflict Occurs, when more than one user/feature try to update the same file and record.
+
+		2. How to resolve Merge Conflict ?
+			1. Identify the file(s) causing the merge conflict.
+			2. Review the content of the File that is causing merge conflict.
+			3. Decide whose changes to be merge/retained in Target Branch.
+			4. Update the file accordingly.
+			5. Add and Commit the changes.
+		
+
+	How to prevent Merge Conflicts ????
+			-	Review.
+
+		Merging -->
+
+		
+		Rebase :::::
+
+			master	--> cm1,cm2,cm3
+
+				feature1 --				
+					cm1,cm2,cm3
+
+				feature2 --			
+					cm1,cm2,cm3
+
+		Perform Incremental Changes in feature1 ::
+
+				feature1 --
+					cm1,cm2,cm3,f1cm1
+
+				switch to master
+				git merge feature1
+
+				* master ---> cm1,cm2,cm3,f1cm1
+					both master & feature1 are in-sync.
+
+
+
+				feature2 --
+					cm1,cm2,cm3,f2cm1
+
+				switch to master
+				git merge feature2			
+				* master ---> cm1,cm2,cm3,f2cm1,f1cm1
+
+			Rebase ::::
+				Always we shd perform rebase, before merge. If it is a shared repo./branch
+			
+			Current Branch : feature2
+				feature2 --
+					cm1,cm2,cm3,f2cm1
+
+				git rebase master 
+					cm1,cm2,cm3,f1cm1,f2cm1
+				
+
+				switch to master
+				git merge feature2			
+				* master ---> cm1,cm2,cm3,f1cm1,f2cm1
+
+	
+		Squash ::: Its is used to combine multiple commits into one.
+				
+			index.jsp
+
+
+			master	--> cm1,cm2,cm3
+
+				feature1 --				
+					cm1,cm2,cm3,f1cm1,2,....................,100
+
+
+		Java_Program --> Calculator.java 
+
+			5 function. 
+
+		add(){
+		asdfas
+		dfa
+		sdf
+		a
+		df
+		asd
+		f
+		}
+
+		sub()
+		.......()
+
+		project_repo:
+	
+		master - CMCM,add_func,sub_func
+
+			calc_feature --> CM,addcm1,addcm2,addcm3,addcm4,addcm5,subcm1,2,3,4,5,6,7,8
+
+			calc_feature --> CM,add_func,sub_func
+
+
+		squash :
+			- Before Merge: (While working in feature branch)
+
+				git rebase -i HEAD~3
+
+
+			- while merging:
+				git merge --squash feature1
+
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+		master	--> cm1,cm2,cm3,Changes_from_Team1		
+
+			Release_Branch ::: cm1,cm2,cm3,Changes_from_Team1,Changes_from_Team2		===>  Release_V1.4
+					cm1,cm2,cm3,f1cm1,f1cm2,3,4,5,6,7,8,9,f2cm1,f2cm2,3,4,5,6,7,8,9,f3cm2,3,4,5,6,7,8,9,f1cm1,f1cm2,3,4,5,6,7,8,9,f2cm1,f2cm2,3,4,5,6,7,8,9,f3cm2,3,4,5,6,7,8,9
+
+				Integration_Branch :::	cm1,cm2,cm3,Changes_from_Team1_dev1,Changes_from_Team1_dev2   ==> Changes_from_Team1					Team1
+
+					Development_Branch1 : cm1,cm2,cm3,f1cm1,f1cm2,3,4,5,6,7,8,9,f2cm1,f2cm2,3,4,5,6,7,8,9,f3cm2,3,4,5,6,7,8,9 ==> Changes_from_Team1_dev1
+								
+
+						feature1 --				Commpleted
+							cm1,cm2,cm3,f1cm1,f1cm2,3,4,5,6,7,8,9
+						feature2 --
+							cm1,cm2,cm3,f2cm1,f2cm2,3,4,5,6,7,8,9
+						feature3 --
+							cm1,cm2,cm3,f3cm1,f3cm2,3,4,5,6,7,8,9
+		
+
+					Development_Branch2 : cm1,cm2,cm3		==> Changes_from_Team1_dev2
+
+						feature1 --				Commpleted
+							cm1,cm2,cm3,f1cm1,f1cm2
+						feature2 --
+							cm1,cm2,cm3,f2cm1,f2cm2
+						feature3 --
+							cm1,cm2,cm3,f3cm1,f3cm2
+
+
+				Integration_Branch :::	cm1,cm2,cm3,Changes_from_Team2_dev1,Changes_from_Team2_dev2	  ==> Changes_from_Team2				Team2
+
+					Development_Branch1 : cm1,cm2,cm3		===> Changes_from_Team2_dev1
+
+						feature1 --				Commpleted
+							cm1,cm2,cm3,f1cm1,f1cm2
+						feature2 --
+							cm1,cm2,cm3,f2cm1,f2cm2
+						feature3 --
+							cm1,cm2,cm3,f3cm1,f3cm2
+		
+
+					Development_Branch2 : cm1,cm2,cm3		===> Changes_from_Team2_dev2
+		
+						feature1 --				Commpleted
+							cm1,cm2,cm3,f1cm1,f1cm2
+						feature2 --
+							cm1,cm2,cm3,f2cm1,f2cm2
+						feature3 --
+							cm1,cm2,cm3,f3cm1,f3cm2
+
+
+
+
+
+
+	cherrypick ::
+ 		git cherry-pick <commit_id>  -- executed from the target branch.
+
+ 		git cherry-pick <commit_id> <commit_id>
+
+Summary: 
+
+	Local repo & all the git commands....
+		git file workflow
+		git branching strategies
+		Merge conflicts
+		rebase,squash
+
+
+Next : Remote Repositories :::
+
+
+
+
+	developer : Project folder
+					index.jsp  ==> 2000+ lines of code
+
+			local_machine...
+				Project_Folder
+					master --> index.jsp  ==> 2000+ lines of code
+
+						feature1 ==> index.jsp  ==> 2000+ lines of code +++1000
+
+
+
+##############
+29th Apr. 2023
+##############
+
+		Git Remote Repositories :::
+
+			git branching techniques 
+			rebase, squash
+			branching strategies
+			Stash ==> 
+
+		
+	Branching Strategies :::
+
+		Feature based 
+
+
+
+		master branch 
+			Dev_branch : 
+			 	feature1 ==> Scripts... created some changes in the repo.... created a index.jsp file --- adding the incremental changes to staging.
+				feature2 
+
+		Stash ::: ==> Used to safely move the UnCommited changes from staging area to Temp. Area. (or) Temp. Branch.
+
+
+			Stash current work:
+					$ git stash
+
+					Saving stashes with a message: 
+					$ git stash save "<Stashing Message>"
+
+					Check the stored stashes: 
+					$ git stash list
+
+					Re-apply the changes that you just stashed 
+					$ git stash apply 
+
+					Track the stashes and their changes: 
+					$ git stash show stash@{0}
+
+					Re-apply the previous commits: 
+					$ git stash pop
+
+					Delete a most recent stash from the queue: 
+					$ git stash drop
+
+					Delete all the available stashes at once: 
+					$ git stash clear
+
+					Stash work on a separate branch: 
+					$ git stash branch <branch name>
+
+	.gitignore!!!
+	
+	GIT Remote Repository :::
+
+		github :
+			create a remote repo
+			create files,
+			create branches, pull request, merge
+			how to access it in local repo.
+		git clone,pull,fetch,push,remote 
+		github access token 
+ 
+	.gitignore 
+		
+	java_web_appln.project -- craeted in  Dev Machine.
+	
+	Java_web_appln.project 3-tier appln. dbase.     >>>> 	push t changes into remote repo.
+		src 
+		  sample.java
+		  index.jsp 
+		test
+		pom.xml
+		properties
+		config
+		secrets
+		db1_credential
+		target
+		  *.war
+
+	git init 
+	.gitignore file
+		secrets
+		db1_credential
+	
+
+
+
+
+
+
+
+
+	how to access it in local repo.???????
+		git clone,pull,fetch,push,remote 
+		github access token
+
+
+	Remote Repo.?
+
+	Developers' Workload ???
+		New Project 
+			git init  == > push 			
+	
+			git clone  ==> push
+		Change Request / Enhancements 
+		Bug fix...
+	
+		git clone https://github.com/SA-11Mar-2023-DevOps/testremoterepo1.git
+	
+
+git clone
+push
+remote 
+
+	fetch --> check for the incremental changes
+	pull  --> git fetch & merge	
+
+
+
+Summary :::
+	git workflow
+	git branching strategies
+	Misc. GIT Command
+	Merge,rebase,squash,stash
+	Remote Repo.
+
+Next Module ::::		
+
+	Jenkins.
+
+	Maven Projects?
+		web appln.
+		spring boot 
+		java web appln.
+		
+
+
+##############
+30th Apr. 2023
+##############
+
+	git, maven, junit,testNG, Selenium, ansible, docker, kubernetes, prometheus, grafana....
+
+	Build Orchestration Tool ::
+	Jenkins 
+		Is a Master Slave Architecture. 
+	Azure Pipeline
+	AWS Code pipeline
+	gitlab-ci
+
+	Plugins. 
+
+	DevOps Engg. What is ur role in Jenkins ???
+	
+	Jenkins ::
+		
+	Developers Perspective :::
+		Jenkins --
+
+	DevOps Perspective
+	
+		Jenkins Administration ::
+
+			Installation of Jenkins 
+			Config Jenkins Master & Slave 
+			Install and Manage Plugins, Tool
+			Create and Manege Users, Credentials
+			Manage the remote servers 
+			Creating CI/CD Pipeline/Jobs/Project
+			Backup & recovery 
+
+
+
+	Installation of Jenkins ::
+
+		Launch  VM - Ubuntu 
+			Install Jenkins 
+			VM - Slave1
+			VM - Test_Server
+
+
+
+		Jenkins Projects :::
+
+
+			Free-Style projects
+				
+			Pipeline Projects
+
+
+		Variables :::
+			Environment Variables
+			User - Defined Variables	
+
+
+	Jenkins Pipeline :::
+		Scripted Pipeline 				 	--> node
+		Declarative Pipeline -- will start with the keyword 	--> pipeline
+
+
+	Pipeline ??? 
+
+	- defines the CI/CD workflow.
+
+	Java Maven Web Application :::
+
+
+	Source Code >>
+
+		Eclipse based IDEs - coding
+
+		Commit the code to remote git repo.
+
+	Pipeline ::
+		Composed of many stages :
+		Stage1 
+			SCM Checkout
+		Stage2
+			Code Build
+		Stage3 
+			Artifact Creation
+		Stage4
+			Deploy to QA_Server
+		Stage5
+			Automated Testing
+		Stage6 
+			Deploy to higher envi.
+
+	How to write a pipeline script ???
+
+
+Summary:
+
+	Install Jenkins
+	Manage Plugins
+	Locate Jenkins Installation path and explore the components
+	How to create users
+	How to create Free-style Project
+	How to create a very simple pipeline project.
+
+
+Next:
+	Nodes
+	Remote Server Handling
+	email...	
+
+Assignment ???
+
+GIT :::
+
+
+##############
+6th May. 2023
+##############
+
+
+	
+Next:
+	Nodes
+	Remote Server Handling
+	email...
+
+
+		Jenkins Nodes :: Slave Machines
+
+
+		Jenkins Master --> Acts as server - used to create the jobs and schedule the jobs to Nodes.
+			Microservice based architecure!!!
+
+		Jenkins Slave ==> Build Server.
+			Install the build tools (maven,jdk,git)
+
+		Jenkins_Master	
+			Jenkins Slave ==> Build Server. - Java Aplication (maven,jdk,git)
+			SSH Connection --
+			Create user
+				Create SSH to this user 
+
+
+		Jenkins Master - Slave Configuration :::
+			
+
+
+pipeline {
+    agent { label 'sa-javaslave' }
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "slave_maven"
+    }
+
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                echo 'Checkout Src from github repo'
+		git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Perform Maven Build'
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+        }
+        stage('Deploy to QA Server') {
+            steps {
+		script {
+		sshPublisher(publishers: [sshPublisherDesc(configName: 'QA_Server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: 'target/', sourceFiles: 'target/mvn-hello-world.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+		}
+            }
+	}
+    }
+}
+	
+
+	Jenkins Master --> To create a pipeline job
+		Slave1 --> Perform the Build
+
+	Development Workflow :::
+
+	Developer use Eclipse to create the source code 	
+
+		junit tomcat - unit test.
+
+		create artifacts
+
+	Testing team --> QA,UAT
+
+	From Eclipse Code -- Pushed to github --> Jenkins pipeline --> build_server(slave) -> Promote to QA
+
+		Auto-trigger .
+
+	Commit source code in repo.(github)	
+	Checkout the code from github 
+	and perform build			
+			
+	non-prod					prod
+	dev
+	build_envi
+	test(qa,uat,...)
+
+
+	Test_Server ===> test the web application ==> jdk, tomcat
+		VM,  jdk, tomcat, 
+
+
+	Jenkins_Master 
+		Slave1 jdk, maven 
+	TomcatServer -- jdk, tomcat, 
+
+
+	Add user in tomcat server
+		.ssh key -- 
+
+	publish over ssh plugins
+
+	Deployment ::::
+
+		Copy the artifacts from source machine to target machine 
+
+
+	source : slave						Target : Tomcat server
+
+		target/mvn-helloworld.war				/opt/tomcat/webapps/mvn-helloworld.war
+
+
+				
+##############
+7th May. 2023
+##############
+		
+	Automate the build and deployment using Build Triggers!
+
+	Master = Scheduling the pipeline jobs.
+
+	Use case 1 :::
+		
+	Dev,build,test ---> 
+	cleanup,add more volume, 
+
+
+		Build Periodic 
+		 cleanup_vol jobs on daily basis.
+
+		Envi. --> Non-Prod 			PROD 
+			Dev,Build,QA,UAT
+
+		Jenkins_Job -- Start / Stop the Servers
+			Jenkins_Start_job ==> 9AM
+			Jenkins_Stop_job  ==> 10PM
+
+
+	Install git in master :::
+			
+		git poll scm
+
+			Test cycle ==> 
+
+			once in 4 hrs test cycle can run.
+			8 - 12 
+
+
+		dev_team -- commit the changes to src repo. --> QA
+
+		github webhooks
+
+			--> for every commit in the src code repo. build will gets triggered using github webhook.
+
+		goto the repo. level settings :::
+			add web hook
+			github payload url :: http://13.235.2.213:8080/github-webhook/
+
+	
+
+		Java Code Coverage Tool  -- JaCoCo Tool / Plugin
+
+
+
+
+
+
+
+
+
+pipeline {
+    agent { label 'sa-javaslave' }
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "slave_maven"
+    }
+
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                echo 'Checkout Src from github repo'
+		git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+            }
+        }
+        stage('Maven Build') {
+            steps {
+                echo 'Perform Maven Build'
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+        }
+        stage('Deploy to QA Server') {
+            steps {
+		script {
+		sshPublisher(publishers: [sshPublisherDesc(configName: 'QA_Server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: 'target/', sourceFiles: 'target/mvn-hello-world.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+		}
+        }
+	}
+    }
+}
+
+
+
+
+source code repo. Template ::::
+
+Create Remote repo. 
+
+	Jenkinsfile
+	Dockerfile
+	deploymentobj.yaml
+	service.yaml
+
+
+Email Notifications :::::
+
+
+Email Notification Plugins :::
+
+SMTP Server :
+smtp.gmail.com
+
+SMTP Authentication
+
+SMTP Port :: 465
+
+Login to Gmail :::
+
+Click Account Settings
+
+select Security 
+
+MFA --> mobile#
+App Password = 16
+What ? window
+Which Appln - email
+
+
+
+GIT Merge conflicts :::
+
+tried to update the same file from diff branch 
+
+
+master 
+	file1.txt rec1,2,3,4 ==> rec1,234,2342,2342(featurel)	merged
+		git merge feature2
+			     ==> rec1,asdf,aasdf,asdfs(feature2) ==> merging
+	
+	Merge Conflict occurs. file1.txt
+
+	- Identify the file that is causing merge conflict.
+	- Review the changes done in that file.
+	- >>>>>HEAD
+	  feature1
+	  >>>>> feature2
+	- update the file with the actual content. rec1,234,2342,2342
+	- git add and git commit	
+			status will be clean
+
+
+	
+feature1
+	file1.txt rec1,2,3,4 ==> rec1,234,2342,2342
+feature2
+	file1.txt rec1,2,3,4 ==> rec1,asdf,aasdf,asdfs
+
+
+
+Eclipse ::::
+
+Use ::::
+
+	Maven Web Appln.
+	- Using Eclipse, Create Maven Web Appln. project
+	- Push the project to github repo.
+	
+	- Use Eclipse, import the Maven Web Appln. project from github
+	- Make the necessary changes
+	- Push the changes to remote repo.
+
+	Auto trigger Jenkins CI/CD Pipeline using Github webhook / pollSCM. 
+		(SCM Checkout, Build, Create Artifacts, Deploy to QA Server)
+
+	Ensure that you cover all possible concepts.
+
+Jenkins :::
+
+Inhouse project for internal automation....
+
+	Server Management 
+		Build_Server
+		Test_Server
+
+	Periodic Server Management :
+
+	Jenkins_Job1: Backup & Recovery 
+	Jenkins_Job2: Update the security patches / upgrade / Install Cert. & Licenses
+	Jenkins_Job3: Start / Stop Job
+
+
+	
+
+
+				
+##############
+13th May. 2023
+##############
+		
+	Containerization ::::
+
+		build & Deployment ??
+
+	Deployment ---> copy the artifacts from a build server to target
+
+
+	Virtual Machine ???
+
+		It is computing Device --> 
+
+	Server -> Windows10 --> Hypervisor --> VM1,2,3,4,5,6
+
+	VMs --> Refered as Hardware level virtualization
+	    --> Used to run the Operating systems	
+	    --> Consumes lot of space 
+	    --> Consume lot of time to start-up.
+
+	Containers --> Referred as OS Level Virtualization 
+		   --> Used to to run the applications NOT Operating System
+		   --> Lightweight entities -- Consume less space
+		   --> Faster in start-up and exec. any application.
+
+	Infra-Structure Perspectives::
+		
+		Jenkins_Master
+		  Slave1 --> java appln
+		  Slave2 --> python
+		  Slave3 --> NodeJS
+		  Slave4 --> .Net
+		  Slave5 --> ...................100
+
+		Jenkins_Master 
+		  Slave1 
+			--> Container Engine 
+				--> Containers1,2,3,4,5,6,7,8,......,100
+	
+	Development/Deployment Perspectives::
+
+		Developer1 -- src code --> Maven web application --> created using jdk1.7
+				Build --> jdk1.7,maven
+				create artifacts --> jdk1.7,maven
+				Unit Testings -- Junits---->
+				tomcat appln.server --> jdk1.7, tomcat 8.5 	==> sample1.war
+
+				Deployed to QA for testing --> sample1.war
+						jdk1.6,tomcat8
+		 
+				Deployed to UAT for testing --> sample1.war
+						jdk8,tomcat9
+
+				Deployed to PROD for testing --> sample1.war
+						jdk6,tomcat8
+
+		Developer1 -- src code --> Maven web application --> created using jdk1.7
+				Build --> jdk1.7,maven
+				create artifacts --> jdk1.7,maven  ==> sample1.war
+						Create a package (sample1.war,jdk1.7,tomcat8.5)
+							Package/Image -- (sample1.war,jdk1.7,tomcat8.5) --> myappimg1
+							Containers -- (sample1.war,jdk1.7,tomcat8.5)
+				
+				Unit Testings -- Junits---->
+				tomcat appln.server --> jdk1.7, tomcat 8.5 	==> sample1.war_v1.1
+
+		Containers ==> Is package of Application artifacts/binaries and it's dependencies.
+
+
+				Deployed to QA for testing --> 		myappimg1.1(sample1.war,jdk1.7,tomcat8.5)
+						jdk1.6,tomcat8	
+		 
+				Deployed to UAT for testing --> 	myappimg1(sample1.war,jdk1.7,tomcat8.5)
+						jdk8,tomcat9
+
+				Deployed to PROD for testing --> 	myappimg1(sample1.war,jdk1.7,tomcat8.5)
+						jdk6,tomcat8
+
+		Micro-service based application ::: Docker was introduced in 2013.... 
+			Docker Daemon/Engine :::
+
+		Understand Architecture of Docker :
+
+
+		Terminologies :::
+			
+			Docker Engine / Daemon 	-> Core component --> responsible to create images & Containers
+			Images			-> Are just a static package(Non-Executable)
+			Containers		-> Are executable units of Images
+			Container Registries	-> Used to store / Manage various versions of Images.
+				dockerhub ---> 
+				AWS --> ECS,ECR,EKS 
+				AZ 		
+			Repositories		-> Area created inside the Registries to manage the Images.
+		https://hub.docker.com/
+
+
+		Installation of Docker Engine.
+
+		https://docs.docker.com/engine/install/
+
+
+		Launch AWS - Amazon Linux 2 Instance == (Use Previous version to use yum pkg manager) to 
+
+			yum install docker -y
+			
+			systemctl start docker
+			systemctl enable docker
+			systemctl status docker
+
+		Docker CLI -->>> 
+			
+
+		Working with Docker Images / Containers
+
+
+		docker images
+		docker ps
+		docker ps -a
+
+		How to Run containers::
+
+		docker run command :::
+		 Interactive Mode
+		 Detached Mode 	-- Background
+		 Attached Mode  -- Foreground - (default mode)
+
+
+		docker pull centos
+		docker run centos
+
+		docker rmi <image_id>		
+		docker rmi -f <image_id>
+
+		docker rm  <container_id>
+
+		docker stop <container_id>
+
+		docker kill <container_id>
+
+		Tomcat Server :::
+			<external_ip>:8080
+
+		Docker tomcat Image :::
+
+
+		Port Binding / Port Mapping
+
+		docker run -it -p 8085:8080 tomcat:8.0
+
+			# -p host_port:container_port
+
