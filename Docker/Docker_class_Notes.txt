@@ -1263,3 +1263,642 @@ Inhouse project for internal automation....
 
 			# -p host_port:container_port
 
+
+
+##############
+14th May. 2023
+##############
+
+		Create Docker Images
+
+			docker commit 
+			docker build
+				write Dockerfile
+
+		How to publish the Docker images to Docker Registry(Dockerhub)
+
+		*** Deployments thru kubernetes -->
+			
+		Docker Volumes:
+
+
+		Docker Images ???
+
+
+		1. Developer 		--> (*.war/*.jar, dependencies) ==> docker image
+			docker build 	--> use Dockerfile written by Developers
+
+		2. Image - centos 
+			Create a server templates --> using appln. tools
+	
+			Jenkins_Slave Machine ?? Perform appln. build
+				centos, git, jdk, maven
+			Image centos 
+				docker run -it centos bash
+				>> yum git && jdk && maven
+				>> exit 
+			commit -> create new images based on the existing containers
+
+			docker commit
+
+		docker commit 37b2316da5bc loksaieta/sa11-deb-git:v1.0
+
+		docker build -t loksaieta/sa11-git-vim .
+
+
+[root@ip-172-31-42-164 docker-contents]# cat Dockerfile
+
+FROM debian
+RUN apt-get update
+RUN apt-get install git -y
+RUN apt-get install vim -y
+		
+
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install git -y
+RUN apt-get install vim -y
+
+
+docker build -t loksaieta/sa11-git-vim .
+
+How to publish the Docker images to Docker Registry(Dockerhub)
+
+
+1. Login to Dockerhub using Docker CLI.
+	Create Access Token in Docker Hub.
+
+docker login -u loksaieta
+
+dckr_pat_KVP62DU2YZnzHvrRfP9I9fbj4Lw
+
+	
+2. Push the Image to Dockerhub registry.
+
+
+########################################################
+
+Docker Volumes :::
+
+	Containers ---> are not a permanent entity.
+
+
+	*.war --> inside the container --> 
+
+	Docker Volume :::
+
+	Container are used to just run the application 
+
+	Applications --> 
+		Stateless Appln.	-> Just run 
+		Stateful Appln.		-> runs inside the container & it leaves a trace(logs,report) of execution
+
+
+	Appln. -- I need some inputs
+
+	docker volume craete <any-vol>
+	mount that docker volume to container.
+
+
+
+Use Cases ::::
+
+
+	How to handle the application images using DevOps CICD Pipeline.
+
+	CI/CD Pipeline :::
+
+	SCM Checkout 	-->	Build (*.war)	--> Build DockerImage(*.war) --> Publish to dockerhub
+
+	Jenkins_Master 
+	 Jenkins_Slave1 ==> docker,git,jdk,maven(*.war) + Docker Image
+				user --> devopsadmin -- ssh-key
+	
+		sudo usermod -aG docker devopsadmin
+
+	Pipeline ::::
+		
+
+	
+	CI/CD ::
+
+		checkout
+		build
+		build docker image
+		publish docker image to docker hub
+
+	
+pipeline {
+    agent { label 'javaslave1' }
+	
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "mavenbs1"
+    }
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	} 
+    
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/LoksaiETA/devops-java-webapp.git'
+                //git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+            }
+		}
+        stage('Maven Build') {
+            steps {
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+		}
+
+        stage("Docker build"){
+            steps {
+				sh "docker build -t loksaieta/loksai-eta-app:${BUILD_NUMBER} ."
+
+            }
+        }
+		stage('Login2DockerHub') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+        stage('Approve - push Image to dockerhub'){
+            steps{
+                
+                //----------------send an approval prompt-------------
+                script {
+                   env.APPROVED_DEPLOY = input message: 'User input required Choose "yes" | "Abort"'
+                       }
+                //-----------------end approval prompt------------
+            }
+        }
+		stage('Push2DockerHub') {
+
+			steps {
+				sh "docker push loksaieta/loksai-eta-app:${BUILD_NUMBER}"
+			}
+		}
+}
+}
+
+
+
+Docker Compose - we can run multiple containers as a single service
+
+		*.yaml == > define the containers
+
+			run 
+
+
+Microservice :::
+
+sign_in --
+
+		frontend		c1
+		business_logic		c2	
+		backend_DBase		c3
+
+Container Orchestration Tools :::
+
+	Docker Swarm 
+	Kubernetes
+
+
+
+
+
+##############
+20th May. 2023
+##############
+
+	Docker Compose ::
+	Container Orchestration Tools :::
+		Kubernetes
+		Swarm
+	
+	Dockerfile ???
+		
+	Image - It composed of read-only layer which are created using the Dockerfile Instructions
+
+
+
+FROM ubuntu		1 + 3
+RUN apt-get update
+RUN apt-get install git -y
+RUN apt-get install vim -y
+
+		> Dockerfile
+	
+		
+		FROM tomcat:latest
+		WORKDIR /var/lib/jenkins/workspace/jobname1/target
+		COPY loksaieta.war /usr/local/tomcat/webapps
+
+		> docker build -t image1 .
+
+	Dockerfile Instructions :::
+	
+	
+	FROM 	::: Is used to define the base image(pull from docker registry)
+
+	RUN 	::: Is used to run/execute package managers to manage the packages in container
+
+	COPY	::: Is used to Copy the files from Host Machine to Container path
+	
+	ADD	::: Is used to Copy the files from Host Machine to Container path
+			It is also used to copy the files from Url.
+	
+	CP	::: Is used to copy the files within the containers
+
+	WORKDIR ::: Is used to specify the current working dir
+
+	EXPOSE  ::: Is used to expose the container port
+	
+	ENV 	::: Is used to set envi. variables within the image
+
+	VOLUME	::: Is used to define the volume to be used in image
+	
+	CMD	::: Is used to execute any command when run the container
+			/bin/bash  ==> Can be replaced at runtime.
+
+	ENTRYPOINT	::: Is used to execute any command when run the container
+			/sleep 30 ==> Cannot be replaced at runtime
+
+		docker run centos /bin/bash
+
+		docker run tomcat:8.0
+
+		docker run centos sleep 30
+
+	
+	Dockerfile
+
+	 FROM centos
+	 CMD "sleep 30"
+
+
+		docker run centos echo Hi	// During Execution
+	
+	Dockerfile
+
+	 FROM centos
+	 ENTRYPOINT "sleep 30"
+
+
+		docker run centos "echo Hi"	// During Execution
+
+		docker run centos "sleep 60"	// During Execution it take entrypoint def.
+
+
+	Dockerfile
+
+	 FROM centos
+	 ENTRYPOINT "sleep"
+	 CMD "30"
+	
+		docker run centos 60	// During Execution
+
+		docker run centos 60	// During Execution
+
+
+	Docker Compose ::::
+
+		It is docker plugin --> Used to run multiple containers as a Service.
+
+
+	Micro-Service Based Architecture :::: (vs) Monolith ???
+
+
+	E_Commerce Portals :::
+
+	amazon.com
+	
+	3-Tier App. Architecture ::
+
+		Front-End -->		C1
+		Application Logic -->	C2
+		Database	-->	C3
+
+
+	User_Registration	--> Developer1 --> Micro-Service --> 3 Containers are used to run this service.
+	User_Signin
+	Search
+	Add_to_Cart
+	Place_Order
+	Payment
+	Track
+	
+	
+	Working with Docker Compose ::: It is docker plugin
+
+		Jenkins --> publish over ssh plugins
+
+
+	Docker Engine --> Docker Compose Plugins 
+
+
+	
+	Docker Engine --> 
+
+	Install Docker Compose Plugins   // Installation of Docker Compose is req. only on Linux Machines.
+					 // If Docker is running in Windows/Mac --> No need to explicitly install Docker Compose.
+
+
+	Linux Machine ::
+
+
+
+//https://docs.docker.com/compose/install/linux/
+
+
+DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+mkdir -p $DOCKER_CONFIG/cli-plugins
+curl -SL https://github.com/docker/compose/releases/download/v2.18.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+	
+
+chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+docker compose version
+// Docker Compose version v2.18.
+
+	-> Create a manifest/config file ==> Is written using yaml script.
+		vi docker-compose.yaml
+
+[root@ip-172-31-47-216 service1]# cat docker-compose.yaml
+
+version: '3'
+services:
+  webserv:
+    image: "tomcat:8.0"
+    ports:
+      - 8098:8080
+  dbserv:
+    image: "redis:alpine"
+
+
+
+	Container Orchestration Tool :::
+
+		In order achieve high availability of Containerized Applications we used Container Orchestration Tools like 
+
+
+			Docker Swarm 
+
+			Kubernetes
+
+
+	Kubernetes ::: 
+	
+
+		--> Kubernetes Architecture ::::
+
+		--> Kubernetes (K8s) --> Is a Open-Source Container Orchestration Tool, Manages containers and its workload and ensure high availability of containers & Applications.
+
+	Managed Services ::::
+
+		AWS --> EKS
+		Az  --> AKS
+		GCP --> GKS
+	
+
+	Open-Source Kubernetes ::::
+
+		How to work with open-Source Kubernetes :::
+
+		Install of K8s ::::
+
+		Minikube -- Light weight version of K8s.
+
+		kubeadm  -- Install and Config. Prod ready Kubernetes clusters and Components.
+
+
+	--> Kubernetes Architecture ::::
+	
+
+Kubernetes Master:
+
+1. API Server
+2. Scheduler
+3. ETCD
+4. Controller Manager
+
+Worker Nodes :
+
+1. Kubelet, 
+2. Kube proxy, 
+3. CRI - Container Engine
+
+
+	Kubernetes Terminologies & Concepts :::
+
+		kubectl  --> Command line Utility --> Used to interact with K8s.
+		kubeadm  --> Command line Utility --> Used to Install & Configure, Attach K8s Master & Worknodes
+		Pods	 --> Smallest unit of Scheduling
+			 --> Pods is a collection of Container(s).
+
+		Virtual Machine -- VMs
+		Docker		-- Containers
+		Kubernetes	-- Pods
+		
+
+	K8s - Master -- WorkNodes::
+
+	webapp1 => Pod/Container1(10 replicas)	--> Executed in a Host Machine	
+		replica - 1	
+	Master
+		Master
+		  Cluster1
+		 	Worker-Node1		4	
+			Worker-Node2		2
+			Worker-Node3		4
+		  Cluster2
+		 	Worker-Node1		4	
+			Worker-Node2		2
+			Worker-Node3		4		 
+		
+		
+
+##############
+21st May. 2023
+##############
+
+	Docker Swarm vs Kubernetes :::
+
+		Docker Swarm -- is a Container orchestration Tool. It is used in small-scale management
+
+
+	Used to ensure High - Availability of Application Containers.
+	It is used only for Dockerized Applications.
+
+
+	Master & WorkNodes 
+
+	Master 		==> Create the Container Services & Schedule the containers in workernodes.
+	   WorkerNode1 -- VMs (webapp:v1.0)
+	   WorkerNode2 -- Vms (webapp:v1.0)
+  	   WorkerNodeN -- VMs (webapp:v1.0)
+
+ 
+	Application Image ==> webapp.war ==> webapp:v1.0 => Docker Hub Registry 
+
+	Pull the images from docker hub & Deploy in Target Server -->
+
+	Prod_Server --> 
+
+		Very Simple and Easy to Config.
+		AutoLoad Balancing
+		High Scalability
+	
+
+		Master --> 			Create 20 Replicas of Containers
+			10 WorkerNodes
+
+
+	1. Launch the VMs	-- 3 VMs -- (1 + 2)
+
+	2. Enable Complete Access among the servers (2377, 7946, 4789)
+	
+	2.1 Install Docker in all the nodes.
+
+	3. Initialize the Swarm Master(Leader Node) 
+	
+	4. Attach the Worknodes to Master.
+
+	5. Create Docker Container Service & Deploy using docke Swarm
+
+	It will automatically creae replicas, autoscalling, high-availability.
+
+	
+Master Node ==> It is used to Define the Container Services and Schedule to workernodes
+
+WorkNodes are basically used to run the containers.
+
+
+	Master 		==> Create the Container Services & Schedule the containers in workernodes.
+	   WorkerNode1 -- VMs (webapp:v1.0)
+	   WorkerNode2 -- Vms (webapp:v1.0)
+
+
+    1  yum update -y
+    2  clear
+    3  hostname -i
+    4  docker swarm init --adevertise-addr 172.31.9.169
+    5  clear
+    6  yum install docker -y
+    7  clear
+    8  service docker status
+    9  systemctl start docker
+   10  systemctl enable docker
+   11  systemctl status docker
+   12  cler
+   13  clear
+   14  hostname -i
+   15  docker swarm init --advertise-addr 172.31.9.169
+   16  docker node ls
+   17  docker swarm join-token manager
+   18  clear
+   19  docker node ls
+   20  history
+
+Execute below command only in the workernodes to attach to Master :
+
+docker swarm join --token SWMTKN-1-1fc2z69pe9s2b7o6mzjiico61788bbchohokjdkhe3zorl98y3-c4fd5s30ey65fv95ny76mxbrr 172.31.9.169:2377
+
+
+Rolling Update strategy 
+
+	:v1.0 ==> :v1.1 
+
+	3 replicas of container 
+
+
+Kubernetes vs Swarm
+
+Installation and configuration requires lot of manual effort and critical
+GUI
+Enhanced auto scaling capability
+Deployment Controller --> auto scaling, upgrade, roleback,  
+
+
+Installation and configuration is very simple and faster
+CLI ---
+Limited high availability and recovery capabilities
+service
+
+
+
+Kubernetes :::
+
+Architecture ::::
+
+
+
+
+Master Components
+
+Below are the main components on the Kubernetes master node:
+
+etcd cluster – a simple, distributed key value storage which is used to store the Kubernetes cluster data (such as number of pods, their state, namespace, etc), API objects and service discovery details. It is only accessible from the API server for security reasons. 
+
+kube-apiserver – Kubernetes API server is the central management entity that receives all REST requests for modifications (to pods, services, replication sets/controllers and others), serving as frontend to the cluster. 
+Also, this is the only component that communicates with the etcd cluster, making sure data is stored in etcd and agrees with the service details of the deployed pods.
+
+kube-controller-manager – runs several distinct controller processes in the background (for example, replication controller controls number of replicas in a pod, endpoints controller populates endpoint objects like services and pods, and others) to regulate the shared state of the cluster and perform routine tasks. 
+
+cloud-controller-manager – is responsible for managing controller processes with dependencies on the underlying cloud provider (if applicable). For example, when a controller needs to check if a node was terminated or set up routes, load balancers or volumes in the cloud infrastructure, all that is handled by the cloud-controller-manager.
+
+kube-scheduler – helps schedule the pods (a co-located group of containers inside which our application processes are running) on the various nodes based on resource utilization. It reads the service’s operational requirements and schedules it on the best fit node. 
+
+
+
+
+Node (worker) components
+
+Below are the main components found on a (worker) node:
+
+kubelet – the main service on a node, regularly taking in new or modified pod specifications (primarily through the kube-apiserver) and ensuring that pods and their containers are healthy and running in the desired state. This component also reports to the master on the health of the host where it is running.
+
+kube-proxy – a proxy service that runs on each worker node to deal with individual host subnetting and expose services to the external world. It performs request forwarding to the correct pods/containers across the various isolated networks in a cluster.
+
+
+
+
+
+
+
+	--> Kubernetes Architecture ::::
+	
+
+Kubernetes Master:
+
+1. API Server
+2. Scheduler
+3. ETCD
+4. Controller Manager
+
+Worker Nodes :
+
+1. Kubelet, 
+2. Kube proxy, 
+3. CRI - Container Engine
+
+
+
+	Kubernetes Terminologies & Concepts :::
+
+		kubectl  --> Command line Utility --> Used to interact with K8s.
+		kubeadm  --> Command line Utility --> Used to Install & Configure, Attach K8s Master & Worknodes
+		Pods	 --> Smallest unit of Scheduling
+			 --> Pods is a collection of Container(s).
+
+		Virtual Machine -- VMs
+		Docker		-- Containers
+		Kubernetes	-- Pods
+
+Docker Assignments :::
