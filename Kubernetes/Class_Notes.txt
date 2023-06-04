@@ -178,4 +178,322 @@ Test Team :::
 		v1.1
 
 
+##############
+3rd Jun. 2023
+##############
+
+		Kubernetes :::
+		
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod1
+  namespace: dev
+  labels:
+    app: nginx1
+    tier: dev1
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+
+    ports:
+    - containerPort: 80	
+	
+	
+	
+pod == Created & deployed in a worknode
+
+	High availability of application!
+	
+	create replicas of the pod & deploy these replicas in different worknodes.
+	
+	Controller Object:
+	
+		Deployment Controller ::
+			Deploy the pod
+			Replicate the pod instance
+			Upgrade the the pod 
+			roll back the changes
+			scale up the pod 
+			scale down the pod
+		
+		Service :
+			ClusterIP	--> Internal 
+			NodePort
+	
+	Master 
+		Cluster 
+			Worknode1
+			Worknode2
+
+
+App_team1 ==> 
+created artifacts 	--> webapp.war_SNAPSHOT_V1.1 --> webapp:v1.1 --> published to Dockerhub
+created artifacts 	--> webapp.war_SNAPSHOT_V1.2 --> webapp:v1.2 --> published to Dockerhub
+
+	Deployment ::::
+	
+		server-target ==> webapp.war_SNAPSHOT_V1.1
+		server-target ==> webapp.war_SNAPSHOT_V1.2
+
+Kubernetes ::
+
+			Worknode1	
+			Worknode2
+
+		pod1 	v1.1
+		pod2	v1.1
+		pod3 	v1.1
+		
+		pod1 	v1.2
+		pod2	v1.2
+		pod3 	v1.2
+		
+	Deployment controller 			==> by default use RollingUpgrade Deployment Strategy
+	
+	
+	
+	service --> loginpage.
+	
+		3 - tier archi.
+		
+			Frontend 		pod1
+			appln.			pod2
+			Backend 		pod3
+			
+	Docker publish ???? ===>
+	
+	End-to-End Pipeline ::::
+	
+	Jenkins ::
+		SCM-Checkout 
+		Build - App. Build 
+		Docker Build 
+		Publish to Dockerhub 
+		Kubernetes 
+			Deploy the appln. using Deployment Controller 
+			
+			
+	Req. Infra. 
+	
+	VM ==> Ubuntu 
+	
+		Jenkin_Master						==> jdk,jenkins				8080
+			Jenkins_Slave/Build_Server 		==> jdk,git,maven,docker 
+			
+		Kubernetes_Master					==> Kubernetes Toolsets 
+			Kubernetes_Worker_Node1			==> Kubernetes Toolsets 
+			Kubernetes_Worker_Node2			==> Kubernetes Toolsets 	
+
+
+		Non-Prod Environments									Prod Environment
+		
+		Dev
+		QA
+		UAT														Prod 
+
+
+Kubernetes (Non-Prod)Cluster 									Kubernetes (Prod)Cluster 
+	Worknode1,2,3,4,5...											Worknode1,2,3,4,5...
+		
+NameSpace 														NameSpace 
+	- Dev 															- Active_Prod 
+	- QA 
+	- UAT 
+	
+	NameSpaces ????
+	
+	Tools Req. 	
+
+		open_jdk
+		maven 
+		git 
+		docker 
+		jenkins
+		Kubernetes Toolsets 
+
+		Jenkin_Master						==> jdk,jenkins
+			Jenkins_Slave					==> jdk,git,maven
+		QA_Server							==> jdk, tomcat
+												<external_ip_qa>:8080/webapp		
+
+
+
+##############
+4th Jun. 2023
+##############
+
+	Kubernetes :::
+		
+	Infra. Requirements : 	
+		Jenkin_Master						==> jdk,jenkins				8080
+			Jenkins_Slave/Build_Server 		==> jdk,git,maven,docker 
+			
+		Kubernetes_Master					==> Kubernetes Toolsets 
+			Kubernetes_Worker_Node1			==> Kubernetes Toolsets 
+			Kubernetes_Worker_Node2			==> Kubernetes Toolsets 	
+			
+			
+	Tools Requirements :::
+			
+		open_jdk
+		maven 
+		git 
+		docker 
+		jenkins
+		Kubernetes Toolsets 			
+	
+	Connectivity/Access to Jenkins Server :::
+	
+		Jenkins_Master -- Slave/kubernetes
+	
+	
+	Jenkins Pipeline :::
+	
+	
+	scm checkout
+	Appln. Build 
+	Docker Image Build 
+	Publish to Docker Registry
+	Deploy to kubernetes cluster
+
+pipeline {
+    agent { label 'slave1' }
+	
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "maven"
+    }
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	} 
+    
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+            }
+		}
+        stage('Maven Build') {
+            steps {
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+		}
+
+        stage("Docker build"){
+            steps {
+				sh "docker build -t loksaieta/loksai-eta-app:${BUILD_NUMBER} ."
+
+            }
+        }
+		stage('Login2DockerHub') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+		stage('Push2DockerHub') {
+
+			steps {
+				sh "docker push loksaieta/loksai-eta-app:${BUILD_NUMBER}"
+			}
+		}
+}
+}
+
+
+
+
+
+
+pipeline {
+    agent { label 'slave1' }
+	
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "maven"
+    }
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	} 
+    
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+            }
+		}
+        stage('Maven Build') {
+            steps {
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+		}
+
+        stage("Docker build"){
+            steps {
+				sh "docker build -t loksaieta/loksai-eta-app:${BUILD_NUMBER} ."
+
+            }
+        }
+		stage('Login2DockerHub') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+		stage('Push2DockerHub') {
+
+			steps {
+				sh "docker push loksaieta/loksai-eta-app:${BUILD_NUMBER}"
+			}
+
+              post {
+                success {
+                  sh "echo 'Send mail on success'"
+                  mail bcc: '', body: "Docker Image published to DockerHub. Please verify!", cc: 'loksaieta223@gmail.com', from: '', replyTo: '', subject: "Docker Image Publish Status", to: 'loksaieta223@gmail.com'
+                }
+              }
+		}		
+
+        stage('Approve - push Image to dockerhub'){
+            steps{
+                
+                //----------------send an approval prompt-------------
+                script {
+                   env.APPROVED_DEPLOY = input message: 'User input required Choose "yes" | "Abort"'
+                       }
+                //-----------------end approval prompt------------
+            }
+        }
+
+		stage('Deploy to QA Cluster') {
+            steps {
+			script {
+				sshPublisher(publishers: [sshPublisherDesc(configName: 'SA11Kubernetes', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -f k8smvndeployment.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+			}
+		}
+			  post {
+				success {
+				  sh "echo 'Send mail on success'"
+				  mail bcc: '', body: "Deployment to Kubernetes Cluster is successful", cc: 'loksaieta223@gmail.com', from: '', replyTo: '', subject: "Job ${JOB_NAME} (${BUILD_NUMBER})", to: 'loksaieta223@gmail.com'
+				}
+				failure {
+				  sh "echo 'Send mail on failure'"
+				  mail bcc: '', body: "Deployment to Kubernetes Cluster Failed", cc: 'loksaieta223@gmail.com', from: '', replyTo: '', subject: "Deployment Status", to: 'loksaieta223@gmail.com'
+				}
+			  }	
+	}
+}
+}
+
 
