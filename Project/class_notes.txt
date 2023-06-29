@@ -1,0 +1,84 @@
+
+####################
+## Project Phase  ##
+####################
+
+Domains ::
+		Banking	
+		Health Care
+		Insurance
+		
+	Domain Knowledge ::--> self-paced
+	
+	Demo --> 
+	
+	
+	Continuous Development ::
+	
+	CI/CD ::	
+	
+	Continuous Monitoring ::
+	
+	
+Implementation ::::
+
+	Continuous Development :::	
+		
+	Continuous Integration/CDelivery/CDeployment :::
+	
+Process/Steps to be follow ::::
+
+	1. Gathering Info. & Cust. Requirements
+	2. Developer plan & develop the src code
+	3. publish the src code to github repo
+	4. Devops CI/CD Pipeline starts
+	5. automate build and deployment
+	
+How to implement these process/steps??
+
+	1. Infra-Structure Setup/Configuration :::
+	
+		Requirements ???
+		
+		What are the environments needed?
+		How many Servers needed?
+		What are the tools will be installed in each server?
+		How the servers are connected?
+		And the Servers dependencies and workflow.
+		
+	2. Application Development :::
+		Create Application Project using Eclipse.
+			Make some update in the project
+	
+	3. CI/CD - Pipeline to be created to perform automated build/deploy
+	
+	4. Monitoring 
+	
+
+
+	1. Infra-Structure Setup/Configuration :::
+	
+		Requirements ???
+		
+		What are the environments needed?
+			DEV
+			QA 
+			PROD
+		
+		How many Servers needed?
+			Dev Machine - (local windows Machine)
+			Jenkin_Master - (create jenkins jobs/scheduling) 
+			Jenkin_Slave  - (Perform Build and create artifacts 
+			
+		What are the tools will be installed in each server?
+			DEV :
+				Local Machine :::
+					Tools ::: 	JDK, Eclipse, Tomcat, GIT,
+								Visual Studio Code, Terraform
+								
+			
+			
+		
+		What are the tools will be installed in each server?
+		How the servers are connected?
+		And the Servers dependencies and workflow.
