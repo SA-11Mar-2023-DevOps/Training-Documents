@@ -1,0 +1,160 @@
+17th June 2023 
+______________
+
+SA-11
+
+		Continuous Monitoring ::
+		
+			Prometheus and Grafana:::
+			
+			Monitoring --> 
+			
+				Continuous Development :::
+				
+					create src Code ---> IDE 
+					
+					Java Application --> 
+					
+							Import <libraries>
+							
+					Build --> 
+					Docker --> to containerize ==> 
+					
+						FROM <base_image>
+						
+					Maven Project ::
+						pom.xml ==> dependencies and plugins --> 
+						
+						
+				==> 
+				QA -->
+				
+			Monitoring :::			
+			
+				Infrastruture - Monitoring 
+				
+						Memory, CPU, Traffic 
+								Prometheus, Splunk, Dynatrace, Nagios 	==> Monitoring Tools 
+								Grafana 								==> Visualization Tool		
+				
+				Application Monitoring
+						Used to Monitor the Applications performance ::
+							AppDynamics 	
+			
+				Security
+						Application / Infra-struture
+					
+						Security Audit. 
+								Static Code Analyzer - SAST tools
+								
+								Dynamic Code Analyzer - DAST tools 
+								
+									Intrution detections 
+								
+								
+				DevSecOps ==> 
+									
+					To Achieve Continuous Deployments:::
+			
+			Prometheus Architecture :
+			
+			Install and Config. prometheus 
+			
+			Query the metrics using prometheus 
+			
+			
+				Prometheus is used for Infra-struture Monitoring 
+						Helps to continuous monitor the infra- --> CPU, memory
+						
+				Agent based Client-Server Architecture
+			
+				Prometheus Server --> 						VM -> Install Prometheus 			
+					Tragets/Clients/Nodes 
+						Jenkins_Slave Machines 
+						Kubernetes_Clusters
+						Build_Servers 
+						Production_Servers
+						
+				Agent --> Node_Exporter
+				
+				
+				Prometheus Architecture :::
+				
+						Production Monitoring Team.
+						Production Support Team. 
+						
+				Installation and Configuration of Prometheus and Grafana :::
+				
+				1. Launch AWS EC2 Instance 
+				2. Download and extract Prometheus Tool 
+				3. Create Prometheus Service & Execute the Prometheus Service.
+				4. Add the Target Machines to Prometheus Server
+						- Install Node_Exporter Agent in the Target Machine.
+						- Create Node_Exporter Service and execute it.
+				5. Grafana 
+						- Create Visualization of the metrics of Monitoring Tools 
+
+DevOps Cloud Services ::::
+
+
+		DevOps Tools :::
+		
+			Open-Source Tools 
+			
+				Jenkins, Ansible, Docker, Kubernetes - HELM, Terraform
+				
+				
+			Managed-Services:::
+			
+				AWS :::: Cloud Service 
+					DevOps Services::
+					
+					Code Commit 			github repo
+					Code Pipeline 			jenkins 
+					Code Build 				automated build 
+					Code Deploy 			deployment
+					Code Artifact 			jfrog 	
+
+				Cloud Formation Templates :::
+				
+							IAC ==> Infra-struture As Code !!!
+									Provision & config. Infra-struture --> IAC Tools 
+									
+							Cloud Formation -- CFT ==> AWS Resource - yaml/json - keyvalue pair...
+							
+							Terraform --> Provision Resources -> Support multi-cloud/on-prem/hybrid platforms
+							
+							ARM --> Az Resource Manager
+							
+
+				Az DevOps 
+					Az Boards
+							ALM --> Application LifeCycle Management Tool 
+							JIRA 
+								Create User Stories -> Assign Resource - Manage the End-to-End Project LifeCycle
+					Az Repo		--> GITHUB -->
+					Az Pipelines	--> Jenkins --- *.yaml
+										Build 
+										Release
+					Az Test			--> Test Automation 
+					Az Artifacts    --> Jfrog Artifactory
+										payment_service_SNAPSHOT_V1.0
+										payment_service_SNAPSHOT_V1.1
+										payment_service_SNAPSHOT_V1.2
+				Az Container Service/Registry/ 
+				Az Kubernetes Service 
+								
+				GCP
+			
+			
+			
+		Project :::
+				3 Project --> 
+					Domain Knowledge 
+						Banking Domain	
+						HealthCare 
+						Insurance 
+			
+					Projects 
+						Project Repository :::
+			
