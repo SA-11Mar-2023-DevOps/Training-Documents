@@ -1,0 +1,414 @@
+###############
+24th June 2023
+###############
+
+		Micro-Service Based Aplication :::
+		
+			3-tier application Architecture ::::
+			
+			frontend -- Application -- Backend(Database - MYSQL, ORACLE)
+			
+		SQL - Structured Query Language.
+		
+		SQL -->
+		
+			Database ???
+			
+			Collection of Data ???
+			
+			What is Data ???
+			
+			Bit of Information ???
+			
+			What is Information ???
+				User Inputs ???
+				
+				5 ==> Information?
+				Hello ==> Information?
+				
+			Data --> Just a raw text without any meaning!
+			When the data(raw text) is processed, it becomes information.
+			
+			Processed data are called as Information.
+			
+			INDIA 					===> 	Data 
+			INDIA is Country 		===>	Information
+			
+			
+			To Managed the Data :
+			
+			Variables :::
+			
+			int a = 5;
+			
+			int a[5][5] = {3,4,5,6,7}
+			
+			File Systems ::: are used to store and manage
+			
+			5,aafasdfasd
+			3,asdfasdf
+			6,asdfasdf
+			7,asdfasdf
+			5,asdfasdfasdfsdfsadf
+			
+			Indexed filesystem ::::
+			
+			DataBase ::::
+			
+				Tables(row,col) 
+				
+				Employees_Details 
+				
+				Emp_No			Emp_Name 
+				1001			xyz
+				1002			qwer
+			
+			DataBase Management System :::
+					Database1,2,3,4,5
+					tablesdb1
+			
+			
+			Relational DBMS 			
+			
+				Employees_Details 		Parent Table 
+				
+				Emp_No			Emp_Name 		Addr			COUNTRY
+				1001			xyz				adfasdf			India
+				1002			qwer			adfasdfsadf		Paki			====> deleted??
+
+
+				Employees_Project_Table 	Child Table 
+				
+				Emp_No			Proj_ID			Project_Name 
+				1001			P001			afasdf
+				1002			P001			afasdf				
+				
+			
+		SQL Constraints!!
+		
+			EMP_Database :			Drop table <table_name>;
+				Employees_Details
+				
+				Emp_No			Emp_Name 		Addr			COUNTRY		Mobile_No		Salary	
+				1001			zuss			adfasdf			India						55000
+				1002			qwer			adfasdfsadf		Paki		12312312312		23423
+				1003			asdfasdf		asdfasdfsdf		asdfs		123123123		42343
+				
+				
+			Structure of Table ::
+			
+			Table_Name
+				Fields along with Datatypes
+				
+			Unique Constraint
+			Not-Null Constraint
+			Allow-Null
+			Data/Check Constraint
+			Primary key Constraint 
+					Unique Constraint
+					Not-Null Constraint
+			Referential Integrity Constraint :::
+				
+				
+		SQL --> 
+		
+			Create and Manage the Database/Tables ::
+		DDL	- Create,Drop,Alter,Truncate	
+		DML - Insert,Update,Delete,Select
+		DCL
+		
+		
+		Conditions ::::
+		
+			where clause :::
+			
+		
+		Select * from db1.Employees_Details;
+		
+				Emp_No			Emp_Name 		Addr			COUNTRY		Mobile_No		Salary		DOJ		
+				1001			zuss			adfasdf			India						55000		12/4/2003
+				1002			qwer			adfasdfsadf		Paki		12312312312		23423		12/4/2002
+				1003			asdfasdf		asdfasdfsdf		asdfs		123123123		42343		12/4/2002
+				
+				
+		Select Emp_No,Emp_Name from db1.Employees_Details;
+		
+				Emp_No			Emp_Name
+				1001			zuss	
+				1002			qwer	
+				1003			asdfasdf
+				
+		Select Emp_No,Emp_Name from Employees_Details where Salary > 40000;
+
+				Emp_No			Emp_Name			
+				1001			zuss	
+				1003			asdfasdf
+				
+		Select Emp_No,Emp_Name from Employees_Details where Emp_No = 1003;
+
+				Emp_No			Emp_Name			
+				1003			asdfasdf
+				
+
+		Select Emp_No,Emp_Name from Employees_Details where Salary > 40000 AND COUNTRY = 'INDIA';
+
+				Emp_No			Emp_Name 
+				1001			zuss	
+				
+		Select Max(Salary) from from Employees_Details;
+		55000
+		
+		Select Emp_No, Emp_Name from Employees_Details where Salary = (Select Max(Salary) from from Employees_Details);
+				Emp_No			Emp_Name 
+				1001			zuss		
+			
+		Group by Clause
+		Having Clause
+		
+		
+		SQL in Local Machine 
+		
+			MYSQL / ORACLE -->
+			
+		SQLiteStudio ==> https://sqlitestudio.pl/
+		
+		sqlzoo.net 
+		
+####################		
+Python Module :::
+####################		
+	
+		Fundamentals of Python ::::
+		
+			Python Console Application 
+			Python Web Application 
+			
+			Pre-requisites 
+			
+			
+		Python scripts ===> 
+		
+			Eclipse IDE --> for Java based application ::
+			
+			Desktop
+			Mobile 
+			Web Application 
+			
+		IDE --> PyCharm IDE 
+			-->	Visual Studio Code IDE 
+					Install Python Extension
+					
+		Tools --> Install Python 
+					IDLE - Utility to work with python.
+					https://www.python.org/downloads/
+					
+					
+		Python Variables ::::
+		
+		int a = 3;
+		
+		
+			x = 5
+			
+			s = "adf"
+			
+			print(x)
+			
+			
+		sum(){
+		int x = 5;
+		return x
+		}
+		
+	
+	
+		Java Web Application :::
+		
+			maven web application 
+			spring-boot				- Is a web application framework 
+			
+			
+		Python :::
+		
+			Web Application Framework
+				- Django
+				- Flask
+
+	Open Visual Studio Code 
+	Create Project Folder :
+	
+	Open New Terminal :
+		
+		
+		Install : 	Web Application Framework
+			pip install flask
+	
+		Create app.py 
+
+				from flask import Flask, render_template
+
+				app = Flask(__name__)
+
+				@app.route('/')
+
+				def sample():
+					return render_template("sample.html")
+
+				if "__name__" == "__main__":
+					app.run(debug=True)
+
+		Create "templates" folder at root level :::
+				Create Html files :: eg. sample.html 
+				
+				<!DOCTYPE html>
+				<html lang="en">
+				<head>
+					<meta charset="UTF-8">
+					<title>www.loksaieta.com</title>
+					<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+				</head>
+				<body>
+				  <div class="jumbotron" style="background-color:white">
+					  <img src="https://octodex.github.com/images/spidertocat.png" alt="Spidertocat"
+						   class="img-responsive center-block" style="width:250px"/>
+					  <h2 class="text-center">Hello Everyone</h2>
+					  <p class="text-center"> SA 11 - Python Demo...</p>
+				  </div>
+				</body>
+				</html>	
+
+		set FLASK_APP=sample
+	
+		python -m flask run
+		
+Next ::: 
+
+####################		
+Selenium :::
+####################	
+
+		Continuous Testing!!!!
+			
+		SA11 - Mar.
+		
+		Continuous Development :::
+		
+			Selenium ==> 
+			
+			
+Install JDK
+Install Eclipse
+Download the chromedriver.exe – version should be same as the chrome already installed from this link - https://chromedriver.chromium.org/ - choose 32bit for windows
+Create new workspace
+Create Maven Project with simple archetype
+Create a folder in project call Drivers and copy the chormedriver.exe in it.
+Update pom.xml file with the required dependencies and plugins like selenium and testNG and compiler
+https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
+Install TestNG in Eclipse.
+
+Create package under src/test/java
+Create Class under this package 
+And all the test script as shown 
+Run as testNG
+
+
+
+package seleniumpkg1;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+public class Testloginpage {
+
+	@Test
+	public void login() {
+		System.setProperty("webdriver.chrome.driver", "./webdrivers/chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("http://65.1.130.169:8080/login?from=%2F");
+		WebElement username=driver.findElement(By.id("j_username"));
+		WebElement password=driver.findElement(By.name("j_password"));
+		WebElement login=driver.findElement(By.name("Submit"));
+		username.sendKeys("Loksai");
+		password.sendKeys("lokafdasdfsdfsdsai");
+		login.click();
+		String actualUrl="http://65.1.130.169:8080/";
+		String expectedUrl= driver.getCurrentUrl();
+		Assert.assertEquals(expectedUrl,actualUrl);
+	}
+}
+
+
+Create a Selenium WebDriver instance
+Configure browser if required
+Navigate to the required web page
+Locate the relevant web element
+Perform action on the web element
+Verify and validate the action
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>seleniumprojects</groupId>
+  <artifactId>seleniumdemo</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>seleniumdemo</name>
+  <description>seleniumdemo</description>
+ 
+  <dependencies>	  
+		  <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+		<dependency>
+		    <groupId>org.seleniumhq.selenium</groupId>
+		    <artifactId>selenium-java</artifactId>
+		    <version>4.10.0</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
+		<dependency>
+		    <groupId>org.testng</groupId>
+		    <artifactId>testng</artifactId>
+		    <version>7.8.0</version>
+		    <scope>test</scope>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-simple</artifactId>
+		    <version>2.0.7</version>
+		    <scope>test</scope>
+		</dependency>
+  </dependencies>
+
+<build>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+           	<artifactId>maven-compiler-plugin</artifactId>
+           	<version>3.6.1</version>
+           	<configuration>
+           		<source>1.8</source>
+           		<target>1.8</target>
+           	</configuration>
+  		</plugin>
+  		
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+           	<artifactId>maven-surefire-plugin</artifactId>
+           	<version>2.20</version>
+           	<configuration>
+           	 	<suiteXmlFiles>
+           			<suiteXmlFile>testng.xml</suiteXmlFile>
+           			<!-- <suiteXmlFile>src/main/resources/testng.xml</suiteXmlFile> -->
+           		</suiteXmlFiles>
+           	</configuration>
+  		</plugin>
+  	</plugins>  
+  </build> 
+   
+  
+</project>
+
+
