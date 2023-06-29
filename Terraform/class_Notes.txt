@@ -1,0 +1,202 @@
+			
+18th June 2023 
+______________			
+			
+			Infra-Struture As Code using Terraform :::
+			
+			Terraform is a IAC Tools -- Used to provision the Servers.
+			
+				IAC Tools
+				
+			Terraform ::::
+			
+				1. Identify the scope.
+				2. Download the providers into the workspace.
+				3. Write the config file --> HCL
+				4. terraform init ---> Used to install provider 
+				5. terraform plan ---> Validate the config file - and identify the required changes.
+				6. terraform apply --> used to actually apply the changes in target envi.
+			
+			
+			
+			Installation of Terraform :::
+
+				Windows/Mac/Linux :::
+				
+				Windows --> install terraform in windows ::::
+				https://developer.hashicorp.com/terraform/downloads
+				
+			Install Terraform in Windows ::::
+				https://developer.hashicorp.com/terraform/downloads
+
+			Download AMD46 - for terraform in windows.
+			Extract 
+			Create Enivornment variable using the path.
+			
+			
+			Visual Studio Code ::: IDE 
+				To create the Terraform config file 
+				Terminal to run terraform cli commands.
+				
+				How to a create a simple aws ec2 instance:
+				
+			Install Visual Studio Code :::
+				https://code.visualstudio.com/download
+			
+			Install Hashicorp Terraform Extension for Visual Studio Code.
+			
+			Terraform Extension :::
+			
+			Create terraform config files in a folder.
+				Create terraform config file *.tf
+				
+			provider {
+				Identify the scope and provider installation.
+			}
+			
+			Create the Resource
+			
+			Create AWS Account :
+				Access Key 
+				Secret Key
+						
+			
+			Resource Action Indications :::
+			
+				Add / Change / Destroy
+				
+				
+			+		===> 	Add 
+			-		===> 	Destroy 
+			~		===> 	Change 
+			
+			
+		Resource Allocation ::::
+			
+			config file 
+			downloaded provider 
+			
+			terraform.tfstatefile 
+			
+			state file ::::
+
+	Dev_Cycle 
+	Rel_Cycle 
+	
+		For any Planned - Dev / Release process 
+
+			We have dedicated environments (Servers)
+				DEV 
+				Test - QA , UAT 
+				PROD 
+
+		Unplanned / Adhoc Requirements :::
+			Bugfixing 
+			
+			Dev - Change --> Test --> Release to prod.
+			
+			Dev --> Test Environment (Created Dynamically using Terraform) & Config. using Ansible.
+			
+
+CI/CD Pipeline :::
+
+	SCM-Checkout ----> 	Application-Build 	----> Deploy to Test Envi.	----> Test the Appln. ----> Release to prod
+
+	SCM-Checkout ----> 	Application-Build 	----> (Create Test Servers ----> Configure Test Server) ----> Deploy to QA/UAT ----> QA/UAT Test ---->  PROD Deploy --> Prod Testing ---> Delete the Test Servers
+
+
+Pipeline-Job1 :::
+	Create Test Servers ----> Configure Test Server
+	
+Pipeline-Job2 :::
+	SCM-Checkout ----> 	Application-Build 	----> Deploy to Test Envi.	----> Test the Appln. ----> Release to prod ----> Testing ---> Delete the Test Servers
+		
+Pipeline-Job3 :::
+	Delete the Test Servers
+
+
+GITOPS ==> Infra-struture.
+
+	v1.0 --> app.war_v1.0
+
+	v1.1 --> app.war_v1.1	
+
+
+		Terraform Statefile 
+			
+		How to create an EC2_Instance with all the required resources.?
+		
+		
+	
+				
+		Project :::
+		
+			--> Define Infra-Structure :::
+			
+		Banking/HealthCare/Insurance :::
+
+		Source-Code Repository :::
+				Maven - Web Application 
+				Springboot - Web Application
+		
+		Project Documentation :::
+			- Domain Knowledge 
+			- Project Requirements
+					Problem Statements :::
+								
+			--> Create Project 
+			
+			--> Test Project 
+			
+			--> Deploy and Execute 
+			
+			--> Monitor 
+				
+			
+	=====> Define Infra-Structure :::		
+	
+		Developer Role 
+		
+		DevOps Role 
+
+	Developers Role :		
+		A. Dev Machine - Local Windows  - Dev Environment  
+				Eclipse for java web developers/jdk/git/maven/
+		
+		B. DevOps Role 					- DevOps Automation Tools 
+				Visual Studio Code -->  To create - groovy/yaml/HCL
+				Terraform
+				
+				
+CI/CD ::::
+
+		AWS Cloud  :::	List of Servers ?
+		
+		Jenkins_Master 
+		Jenkins_Slave 
+		QA-Server  --> docker,kubernetes 
+		Monitoring Server 
+		
+Workflow :::
+
+
+	Developers create the src code 
+		- perform build/unit testing - eclipse/tomcat
+	Push the src code to github 
+	Jenkins 	-- 	SCM Checkout 
+					Perform appln. Build ==> Compile & Create artifacts 
+					
+					Perform Docker Build
+					Publish to Dockerhub 
+				
+				Deploy to QA_Environment					
+					QA Testing 
+
+				Deploy to UAT_Environment					 
+					UAT Testing 
+
+				Deploy to PROD_Environment			 
+					PROD Testing 
+					
+				Monitoring Environments 
+					
