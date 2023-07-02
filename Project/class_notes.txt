@@ -82,3 +82,433 @@ How to implement these process/steps??
 		What are the tools will be installed in each server?
 		How the servers are connected?
 		And the Servers dependencies and workflow.
+
+
+
+
+		
+
+##############
+1st July 2023
+##############
+
+
+Development 
+
+CI/CD Pipeline ::::
+
+	1. SCM Checkout 
+	2. Application Build 
+	2.1 Build Docker Image 
+	2.2 Publish docker image to dockerhub
+	3. Deploy to Kubernetes Cluster
+	
+Monitoring
+
+
+
+Project Workflow :::
+
+	1. Download the complete project repo to your local machine.
+	2. Extract the file
+	2.1
+	3. Open Eclipse in new workspace -> Open the project.
+	
+	
+
+
+Why we shd version control source code ???
+	- To Track the Changes 
+	- Undo/Rollback the changes
+	
+Artifactory Libraries/Repositories
+	- Used to Manage / Versioning the artifacts 
+	
+Container Registry/Repository 
+	- Used to Manage / Versioning the Application Images 
+
+
+
+Why we shd version control source code ???
+	- To Track the Changes 
+	- Undo/Rollback the changes
+	
+	build --> *.war_v1.3 -->  
+	
+	--> Published to dockerhub
+	
+Container Registry/Repository 
+	- Used to Manage / Versioning the Application Images 
+	
+Deployment --> Latest Image --> 
+
+Infra-Provisioning::::
+
+- Create Docker_Build Server using Terraform 
+- Create Ansible Playbook : To Install Docker and Run Docker Image.
+
+- name : Configure Docker on EC2 Instances
+  hosts : all
+  become: true
+  connection : ssh
+  tasks : 
+  - name: updating apt
+    command : sudo apt-get update
+
+  - name : Install Docker
+    command : sudo apt-get install -y docker.io
+
+  - name : Start Docker Service
+    command : sudo systemctl start docker
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//Infra-Provisioning Pipeline :
+
+aws_docker_build_server_config.tf		// Terraform Script
+ansible_docker_install_config.yaml		// Ansible Playbook to install and start Docker.
+
+pipeline {
+    agent { label 'devopsadminserver' }
+	
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	} 
+    
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/LoksaiETA/DevOps_Admin_Repo.git'
+                //git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+            }
+		}
+
+        stage("Create Docker Build Server"){
+            steps {
+				sh 'terraform plan'
+            }
+        }
+
+        stage("Create Docker Build Server"){
+            steps {
+				sh "terraform apply"
+            }
+        }
+		
+        stage('Approve - Docker Installation & Configuration'){
+            steps{
+                
+                //----------------send an approval prompt-----------
+                script {
+                   env.APPROVED_DEPLOY = input message: 'User input required Choose "yes" | "Abort"'
+                       }
+                //-----------------end approval prompt------------
+            }
+        }
+		
+        stage("Install_Config Docker_Build_Server"){
+            steps {
+				sh "ansible-playbook docker-config.yaml"
+            }
+        }
+    }
+} 
+
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//CICD Pipeline :
+
+pipeline {
+    agent { label 'jappbuildserver1' }
+	
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "maven_3.6.3"
+    }
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	} 
+    
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/LoksaiETA/SA11-BankingApp.git'
+                //git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+            }
+		}
+        stage('Maven Build') {
+            steps {
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+		}
+        stage("Docker build"){
+            steps {
+				sh 'docker version'
+				sh "docker build -t loksaieta/loksai-eta-app:${BUILD_NUMBER} ."
+				sh 'docker image list'
+				sh "docker tag loksaieta/loksai-eta-app:${BUILD_NUMBER} loksaieta/loksai-eta-app:latest"
+				sh "docker run -it -p 8085:8081 loksaieta/loksai-eta-app:latest"
+            }
+        }
+        stage('Approve - push Image to dockerhub'){
+            steps{
+                
+                //----------------send an approval prompt-------------
+                script {
+                   env.APPROVED_DEPLOY = input message: 'User input required Choose "yes" | "Abort"'
+                       }
+                //-----------------end approval prompt------------
+            }
+        }
+		stage('Login2DockerHub') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+		stage('Push2DockerHub') {
+
+			steps {
+				sh "docker push loksaieta/loksai-eta-app:latest"
+			}
+		}
+        stage('Approve - Deployment to Kubernetes Cluster'){
+            steps{
+                
+                //----------------send an approval prompt-----------
+                script {
+                   env.APPROVED_DEPLOY = input message: 'User input required Choose "yes" | "Abort"'
+                       }
+                //-----------------end approval prompt------------
+            }
+        }
+        stage('Deploy to Kubernetes Cluster') {
+            steps {
+		script {
+		sshPublisher(publishers: [sshPublisherDesc(configName: 'Kubernetes', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -f k8sdeployment.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+		       }
+            }
+	    }
+    }
+}    
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+//CICD Pipeline :
+
+pipeline {
+    agent { label 'jappbuildserver1' }
+	
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "maven_3.6.3"
+    }
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+	} 
+    
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/LoksaiETA/SA11-BankingApp.git'
+                //git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+            }
+		}
+        stage('Maven Build') {
+            steps {
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+		}
+        stage("Docker build"){
+            steps {
+				sh 'docker version'
+				sh "docker build -t loksaieta/loksai-eta-app:${BUILD_NUMBER} ."
+				sh 'docker image list'
+				sh "docker tag loksaieta/loksai-eta-app:${BUILD_NUMBER} loksaieta/loksai-eta-app:latest"
+				sh "docker run -it -p 8085:8081 loksaieta/loksai-eta-app:latest"
+            }
+        }
+        stage('Approve - push Image to dockerhub'){
+            steps{
+                
+                //----------------send an approval prompt-------------
+                script {
+                   env.APPROVED_DEPLOY = input message: 'User input required Choose "yes" | "Abort"'
+                       }
+                //-----------------end approval prompt------------
+            }
+        }
+		stage('Login2DockerHub') {
+
+			steps {
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			}
+		}
+		stage('Push2DockerHub') {
+
+			steps {
+				sh "docker push loksaieta/loksai-eta-app:latest"
+			}
+		}
+        stage('Approve - Deployment to QA Envrionment'){
+            steps{
+                
+                //----------------send an approval prompt-----------
+                script {
+                   env.APPROVED_DEPLOY = input message: 'User input required Choose "yes" | "Abort"'
+                       }
+                //-----------------end approval prompt------------
+            }
+        }
+        stage('Deploy to Kubernetes QA Namespace') {
+            steps {
+		script {
+		sshPublisher(publishers: [sshPublisherDesc(configName: 'Kubernetes', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -n qa -f k8sdeployment.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+		       }
+            }
+	    }
+
+        stage('Approve - Deployment to UAT Envrionment'){
+            steps{
+                
+                //----------------send an approval prompt-----------
+                script {
+                   env.APPROVED_DEPLOY = input message: 'User input required Choose "yes" | "Abort"'
+                       }
+                //-----------------end approval prompt------------
+            }
+        }
+        stage('Deploy to Kubernetes UAT Namespace') {
+            steps {
+		script {
+		sshPublisher(publishers: [sshPublisherDesc(configName: 'Kubernetes', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -n uat -f k8sdeployment.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+		       }
+            }
+	    }
+
+        stage('Approve - Deployment to PROD Envrionment'){
+            steps{
+                
+                //----------------send an approval prompt-----------
+                script {
+                   env.APPROVED_DEPLOY = input message: 'User input required Choose "yes" | "Abort"'
+                       }
+                //-----------------end approval prompt------------
+            }
+        }
+        stage('Deploy to Kubernetes PROD Namespace') {
+            steps {
+		script {
+		sshPublisher(publishers: [sshPublisherDesc(configName: 'Kubernetes', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'kubectl apply -n prod -f k8sdeployment.yaml', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*.yaml')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+		       }
+            }
+	    }
+		
+    }
+}   
+
+Infra-Provisioning::::
+
+	- Create Docker_Build Server using Terraform 
+	- Create Ansible Playbook : To Install Docker and Run Docker Image.
+- name : Configure Docker on EC2 Instances
+  hosts : all
+  become: true
+  connection : ssh
+  tasks : 
+  - name: updating apt
+    command : sudo apt-get update
+
+  - name : Install Docker
+    command : sudo apt-get install -y docker.io
+
+  - name : Start Docker Service
+    command : sudo systemctl start docker
+
+  - name: Deploy Docker Container
+    command: docker run -itd -p 8084:8081 shubhamkushwah123/finance-me:1.0
+	
+	
+
+Docker 
+Kubernetes
+GIT 
+Jenkins 
+Ansible
+Terraform 
+
+Prometheus & Grafana 
+
+
+
+
+
+
+##############
+2nd July 2023
+##############
+
+
+
+####################
+## Project Phase  ##
+####################
+
+
+
+
+
+For 2+ Yrs. Exp. 
+==> Overall 
+	Focus on:
+	GIT/Jenkins 					==> 
+	Docker 
+	Kubernetes 
+	Ansible 						==> 
+	Terraform
+	GIT/Jenkins/Ansible/Terraform 	==>		Infra-Team
+	
+	Scripting Knowledge 			==> shell/python/Groovy/Yaml
+	
+	S/w Test Engg. 
+	
+	Tech Lead. 						==> 
+		Playing DevOps Engg.
+		Focus more in to DevOps Tools Specific FAQs ==> 2+yrs 
+	
+
+Create local project folder in VSCode --> 
+
+terraform init/plan/apply
+
+tfstate-file -- Current state of the target infra.
+			 -- Desired state
+			 
+backedup in common repo.  5 members 
+
+
+Merging branches :::
+
+
+	master branch :::
+		cm1,2,3
+		
+		
+	feature branch :::
+		cm1,2,3,fcm1,fcm2,fcm3,fcm4,fcm4,fcm6			
+	
+	git cherry-pick ==> is used to merge a specific commit to target branch .
+	
+	
+	git merge feature1
